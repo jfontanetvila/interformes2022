@@ -1,0 +1,1909 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)file:///C:/Users/inter/Downloads/interformes_12.html -->
+<html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interformes · Gestión de Obras</title>
+<link rel="manifest" href="file:///C:/interformes2022/manifest.json">
+<link rel="icon" type="image/jpeg" href="file:///C:/Users/inter/Downloads/Interformes_LOGO.jpg">
+<link rel="apple-touch-icon" href="file:///C:/Users/inter/Downloads/Interformes_LOGO.jpg">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Interformes">
+<meta name="theme-color" content="#f59e0b">
+<link href="./index_files/css2" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --surface2: #222222;
+    --surface3: #2a2a2a;
+    --border: #333;
+    --accent: #f59e0b;
+    --accent2: #d97706;
+    --text: #f0f0f0;
+    --text2: #a0a0a0;
+    --text3: #666;
+    --green: #10b981;
+    --red: #ef4444;
+    --blue: #3b82f6;
+    --purple: #8b5cf6;
+    --orange: #f97316;
+    --radius: 10px;
+    --font: 'DM Sans', sans-serif;
+    --mono: 'DM Mono', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; font-size: 14px; }
+  
+  /* LAYOUT */
+  .app { display: flex; min-height: 100vh; }
+  .sidebar { width: 220px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: fixed; height: 100vh; z-index: 100; }
+  .main { margin-left: 220px; flex: 1; padding: 28px; max-width: 1400px; }
+
+  /* SIDEBAR */
+  .logo { padding: 20px 16px; border-bottom: 1px solid var(--border); }
+  .logo-title { font-size: 16px; font-weight: 700; color: var(--accent); letter-spacing: -0.3px; }
+  .logo-sub { font-size: 11px; color: var(--text3); margin-top: 2px; font-family: var(--mono); }
+  .nav { padding: 12px 8px; flex: 1; overflow-y: auto; }
+  .nav-section { font-size: 10px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; padding: 12px 8px 6px; }
+  .nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; cursor: pointer; transition: all 0.15s; color: var(--text2); font-size: 13px; font-weight: 500; margin-bottom: 2px; }
+  .nav-item:hover { background: var(--surface2); color: var(--text); }
+  .nav-item.active { background: rgba(245,158,11,0.15); color: var(--accent); }
+  .nav-item .icon { font-size: 16px; width: 20px; text-align: center; }
+
+  /* HEADER */
+  .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+  .page-title { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+  .page-title span { color: var(--accent); }
+  .btn { display: inline-flex; align-items: center; gap: 7px; padding: 9px 16px; border-radius: 8px; border: none; cursor: pointer; font-family: var(--font); font-size: 13px; font-weight: 600; transition: all 0.15s; }
+  .btn-primary { background: var(--accent); color: #000; }
+  .btn-primary:hover { background: var(--accent2); }
+  .btn-ghost { background: var(--surface2); color: var(--text2); border: 1px solid var(--border); }
+  .btn-ghost:hover { color: var(--text); background: var(--surface3); }
+  .btn-danger { background: rgba(239,68,68,0.15); color: var(--red); border: 1px solid rgba(239,68,68,0.2); }
+  .btn-danger:hover { background: rgba(239,68,68,0.25); }
+  .btn-sm { padding: 6px 11px; font-size: 12px; }
+
+  /* STATS */
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 24px; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
+  .stat-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+  .stat-value { font-size: 26px; font-weight: 700; margin-top: 4px; font-family: var(--mono); }
+  .stat-sub { font-size: 12px; color: var(--text2); margin-top: 2px; }
+
+  /* TABLE */
+  .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .table-toolbar { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid var(--border); gap: 12px; }
+  .search-input { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; color: var(--text); font-family: var(--font); font-size: 13px; width: 220px; outline: none; }
+  .search-input:focus { border-color: var(--accent); }
+  table { width: 100%; border-collapse: collapse; }
+  th { text-align: left; padding: 10px 14px; font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); background: var(--surface2); }
+  td { padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 13px; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  .td-actions { display: flex; gap: 6px; }
+
+  /* BADGES */
+  .badge { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+  .badge-green { background: rgba(16,185,129,0.15); color: var(--green); }
+  .badge-yellow { background: rgba(245,158,11,0.15); color: var(--accent); }
+  .badge-red { background: rgba(239,68,68,0.15); color: var(--red); }
+  .badge-blue { background: rgba(59,130,246,0.15); color: var(--blue); }
+  .badge-purple { background: rgba(139,92,246,0.15); color: var(--purple); }
+  .badge-gray { background: rgba(255,255,255,0.08); color: var(--text2); }
+  .badge-orange { background: rgba(249,115,22,0.15); color: var(--orange); }
+
+  /* MODAL */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px); }
+  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; width: 100%; max-width: 620px; max-height: 90vh; overflow-y: auto; }
+  .modal-header { padding: 20px 24px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .modal-title { font-size: 17px; font-weight: 700; }
+  .modal-close { background: var(--surface2); border: 1px solid var(--border); color: var(--text2); width: 30px; height: 30px; border-radius: 8px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; }
+  .modal-body { padding: 20px 24px; }
+  .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; }
+  
+  /* FORM */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .form-grid.cols-1 { grid-template-columns: 1fr; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group.full { grid-column: 1 / -1; }
+  label { font-size: 12px; font-weight: 600; color: var(--text2); }
+  input, select, textarea { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 9px 12px; color: var(--text); font-family: var(--font); font-size: 13px; outline: none; width: 100%; }
+  input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+  textarea { resize: vertical; min-height: 80px; }
+  select option { background: var(--surface2); }
+
+  /* DETAIL VIEW */
+  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+  .detail-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
+  .detail-card-title { font-size: 12px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
+  .detail-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 13px; }
+  .detail-row:last-child { border-bottom: none; }
+  .detail-key { color: var(--text2); }
+  .detail-val { font-weight: 500; text-align: right; }
+
+  /* SUB SECTIONS */
+  .sub-section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 16px; overflow: hidden; }
+  .sub-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--border); background: var(--surface2); }
+  .sub-title { font-size: 13px; font-weight: 700; }
+  .sub-body { padding: 12px 16px; }
+  .item-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .item-row:last-child { border-bottom: none; }
+  .item-name { font-size: 13px; font-weight: 500; }
+  .item-meta { font-size: 12px; color: var(--text2); margin-top: 2px; }
+  .empty-state { text-align: center; padding: 32px; color: var(--text3); font-size: 13px; }
+
+  /* TABS */
+  .tabs { display: flex; gap: 4px; background: var(--surface2); padding: 4px; border-radius: 10px; margin-bottom: 20px; }
+  .tab { padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 500; color: var(--text2); transition: all 0.15s; }
+  .tab.active { background: var(--accent); color: #000; font-weight: 700; }
+  .tab:hover:not(.active) { color: var(--text); }
+
+  /* CHIPS */
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .chip { background: var(--surface3); border: 1px solid var(--border); border-radius: 20px; padding: 4px 10px; font-size: 12px; display: flex; align-items: center; gap: 6px; }
+  .chip-remove { cursor: pointer; color: var(--text3); font-size: 14px; line-height: 1; }
+  .chip-remove:hover { color: var(--red); }
+
+  /* CHECKLIST */
+  .checklist-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .checklist-item:last-child { border-bottom: none; }
+  .checklist-item input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; }
+  .checklist-text { flex: 1; font-size: 13px; }
+  .checklist-text.done { text-decoration: line-through; color: var(--text3); }
+  .checklist-priority { font-size: 11px; }
+
+  /* MONEY */
+  .money { font-family: var(--mono); font-size: 13px; }
+  .money-pos { color: var(--green); }
+  .money-neg { color: var(--red); }
+
+  /* NOTA IMPORTANTE */
+  .alert { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); border-radius: 8px; padding: 12px 14px; margin-bottom: 16px; font-size: 13px; color: var(--accent); }
+
+  /* RESPONSIVE — MÓVIL */
+  @media (max-width: 768px) {
+    /* Ocultar sidebar lateral */
+    .sidebar { display: none; }
+
+    /* Main ocupa todo y deja espacio para barra inferior */
+    .main { margin-left: 0; padding: 16px 12px 90px; }
+
+    /* Barra de navegación inferior */
+    .bottom-nav {
+      display: flex;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      z-index: 200;
+      padding: 6px 0 env(safe-area-inset-bottom, 6px);
+    }
+    .bottom-nav-item {
+      flex: 1; display: flex; flex-direction: column; align-items: center;
+      padding: 6px 2px; cursor: pointer; color: var(--text3);
+      font-size: 9px; font-weight: 600; gap: 3px; transition: color 0.15s;
+      text-transform: uppercase; letter-spacing: 0.3px;
+    }
+    .bottom-nav-item .icon { font-size: 20px; }
+    .bottom-nav-item.active { color: var(--accent); }
+    .bottom-nav-item:hover { color: var(--text2); }
+
+    /* Menú "más" desplegable */
+    .more-menu {
+      position: fixed; bottom: 65px; left: 0; right: 0;
+      background: var(--surface); border-top: 1px solid var(--border);
+      z-index: 199; padding: 8px;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+    .more-menu-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px; border-radius: 10px; cursor: pointer;
+      background: var(--surface2); color: var(--text2);
+      font-size: 13px; font-weight: 600;
+    }
+    .more-menu-item.active { background: rgba(245,158,11,0.15); color: var(--accent); }
+    .more-menu-item .icon { font-size: 18px; }
+
+    /* Ajustes de contenido */
+    .form-grid { grid-template-columns: 1fr; }
+    .detail-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: 1fr 1fr !important; }
+    .page-title { font-size: 18px; }
+    .page-header { flex-wrap: wrap; gap: 10px; }
+    .page-header .flex-gap { flex-wrap: wrap; }
+
+    /* Tablas en móvil — scroll horizontal */
+    .table-wrap { overflow-x: auto; }
+    table { min-width: 500px; }
+
+    /* Search input full width */
+    .search-input { width: 100%; }
+    .table-toolbar { flex-wrap: wrap; }
+
+    /* Modal full screen en móvil */
+    .modal-overlay { padding: 0; align-items: flex-end; }
+    .modal { border-radius: 18px 18px 0 0; max-height: 92vh; }
+  }
+
+  /* Desktop — ocultar bottom nav */
+  @media (min-width: 769px) {
+    .bottom-nav { display: none; }
+    .more-menu { display: none !important; }
+  }
+
+  .hidden { display: none !important; }
+  .text-center { text-align: center; }
+  .mt-12 { margin-top: 12px; }
+  .flex-gap { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+</style>
+<script src="./index_files/cb=gapi.loaded_0" async=""></script><script src="./index_files/api.js.descarga" gapi_processed="true"></script><script src="./index_files/client"></script><style id="googleidentityservice_button_styles">.qJTHM{-moz-user-select:none;-webkit-user-select:none;-ms-user-select:none;color:#202124;direction:ltr;-webkit-touch-callout:none;font-family:Roboto-Regular,arial,sans-serif;-webkit-font-smoothing:antialiased;font-weight:400;margin:0;overflow:hidden;-webkit-text-size-adjust:100%}.ynRLnc{left:-9999px;position:absolute;top:-9999px}.L6cTce{display:none}.bltWBb{overflow-wrap:break-word;word-break:break-word}.hSRGPd{color:#1a73e8;cursor:pointer;font-weight:500;text-decoration:none}.Bz112c-W3lGp{height:16px;width:16px}.Bz112c-E3DyYd{height:20px;width:20px}.Bz112c-r9oPif{height:24px;width:24px}.Bz112c-u2z5K{height:36px;width:36px}.Bz112c-uaxL4e{border-radius:10px}.LgbsSe-Bz112c{display:block}.S9gUrf-YoZ4jf{border:none;margin:0;padding:0}.S9gUrf-YoZ4jf *{border:none;margin:0;padding:0}.fFW7wc-ibnC6b>.aZ2wEe>div{border-color:#4285f4}.P1ekSe-ZMv3u{-webkit-transition:height .2s linear;transition:height .2s linear}.P1ekSe-ZMv3u>div:first-child{background-color:#1a73e8!important;-webkit-transition:width .3s linear;transition:width .3s linear}.P1ekSe-ZMv3u>div:nth-child(2){background-image:-webkit-gradient(linear,left top,right top,from(rgba(255,255,255,.7)),to(rgba(255,255,255,.7))),-webkit-gradient(linear,left top,right top,from(#1a73e8),to(#1a73e8))!important;background-image:-webkit-linear-gradient(left,rgba(255,255,255,.7),rgba(255,255,255,.7)),-webkit-linear-gradient(left,#1a73e8,#1a73e8)!important;background-image:linear-gradient(90deg,rgba(255,255,255,.7),rgba(255,255,255,.7)),linear-gradient(90deg,#1a73e8,#1a73e8)!important}.P1ekSe-ZMv3u>div:nth-child(3){background-image:-webkit-gradient(linear,left top,right top,from(rgba(255,255,255,.7)),to(rgba(255,255,255,.7))),-webkit-gradient(linear,left top,right top,from(#1a73e8),to(#1a73e8))!important;background-image:-webkit-linear-gradient(left,rgba(255,255,255,.7),rgba(255,255,255,.7)),-webkit-linear-gradient(left,#1a73e8,#1a73e8)!important;background-image:linear-gradient(90deg,rgba(255,255,255,.7),rgba(255,255,255,.7)),linear-gradient(90deg,#1a73e8,#1a73e8)!important}.haAclf{display:inline-block}.nsm7Bb-HzV7m-LgbsSe{border-radius:4px;box-sizing:border-box;-webkit-transition:background-color .218s,border-color .218s;transition:background-color .218s,border-color .218s;-moz-user-select:none;-webkit-user-select:none;-ms-user-select:none;-webkit-appearance:none;background-color:#fff;background-image:none;border:1px solid #dadce0;color:#3c4043;cursor:pointer;font-family:Google Sans,arial,sans-serif;font-size:14px;height:40px;letter-spacing:.25px;outline:none;overflow:hidden;padding:0 12px;position:relative;text-align:center;vertical-align:middle;white-space:nowrap;width:auto}@media screen and (-ms-high-contrast:active){.nsm7Bb-HzV7m-LgbsSe{border:2px solid windowText;color:windowText}}@media screen and (preferes-contrast:more){.nsm7Bb-HzV7m-LgbsSe{color:#000}}.nsm7Bb-HzV7m-LgbsSe.pSzOP-SxQuSe{font-size:14px;height:32px;letter-spacing:.25px;padding:0 10px}.nsm7Bb-HzV7m-LgbsSe.purZT-SxQuSe{font-size:11px;height:20px;letter-spacing:.3px;padding:0 8px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe{padding:0;width:40px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe.pSzOP-SxQuSe{width:32px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe.purZT-SxQuSe{width:20px}.nsm7Bb-HzV7m-LgbsSe.JGcpL-RbRzK{border-radius:20px}.nsm7Bb-HzV7m-LgbsSe.JGcpL-RbRzK.pSzOP-SxQuSe{border-radius:16px}.nsm7Bb-HzV7m-LgbsSe.JGcpL-RbRzK.purZT-SxQuSe{border-radius:10px}.nsm7Bb-HzV7m-LgbsSe.MFS4be-Ia7Qfc{border:none;color:#fff}.nsm7Bb-HzV7m-LgbsSe.MFS4be-v3pZbf-Ia7Qfc{background-color:#1a73e8}.nsm7Bb-HzV7m-LgbsSe.MFS4be-JaPV2b-Ia7Qfc{background-color:#202124;color:#e8eaed}@media screen and (prefers-contrast:more){.nsm7Bb-HzV7m-LgbsSe.MFS4be-JaPV2b-Ia7Qfc{color:#fff}}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{height:18px;margin-right:8px;min-width:18px;width:18px}.nsm7Bb-HzV7m-LgbsSe.pSzOP-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{height:14px;min-width:14px;width:14px}.nsm7Bb-HzV7m-LgbsSe.purZT-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{height:10px;min-width:10px;width:10px}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-Bz112c{margin-left:8px;margin-right:-4px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{margin:0;padding:10px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe.pSzOP-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{padding:8px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe.purZT-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{padding:4px}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-top-left-radius:3px;border-bottom-left-radius:3px;display:-webkit-box;display:-webkit-flex;display:flex;-webkit-box-pack:center;-webkit-justify-content:center;justify-content:center;-webkit-box-align:center;-webkit-align-items:center;align-items:center;background-color:#fff;height:36px;margin-left:-10px;margin-right:12px;min-width:36px;width:36px}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf .nsm7Bb-HzV7m-LgbsSe-Bz112c,.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf .nsm7Bb-HzV7m-LgbsSe-Bz112c{margin:0;padding:0}.nsm7Bb-HzV7m-LgbsSe.pSzOP-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{height:28px;margin-left:-8px;margin-right:10px;min-width:28px;width:28px}.nsm7Bb-HzV7m-LgbsSe.purZT-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{height:16px;margin-left:-6px;margin-right:8px;min-width:16px;width:16px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-radius:3px;margin-left:2px;margin-right:0;padding:0}.nsm7Bb-HzV7m-LgbsSe.JGcpL-RbRzK .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-radius:18px}.nsm7Bb-HzV7m-LgbsSe.pSzOP-SxQuSe.JGcpL-RbRzK .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-radius:14px}.nsm7Bb-HzV7m-LgbsSe.purZT-SxQuSe.JGcpL-RbRzK .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-radius:8px}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-bN97Pc-sM5MNb{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-align-items:center;-webkit-box-align:center;align-items:center;-webkit-flex-direction:row;-webkit-box-orient:horizontal;-webkit-box-direction:normal;flex-direction:row;-webkit-box-pack:justify;-webkit-justify-content:space-between;justify-content:space-between;-webkit-flex-wrap:nowrap;flex-wrap:nowrap;height:100%;position:relative;width:100%}.nsm7Bb-HzV7m-LgbsSe .oXtfBe-l4eHX{-webkit-box-pack:center;-webkit-justify-content:center;justify-content:center}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-BPrWId{-webkit-flex-grow:1;-webkit-box-flex:1;flex-grow:1;font-family:Google Sans,arial,sans-serif;font-weight:500;overflow:hidden;text-overflow:ellipsis;vertical-align:top}.nsm7Bb-HzV7m-LgbsSe.purZT-SxQuSe .nsm7Bb-HzV7m-LgbsSe-BPrWId{font-weight:300}.nsm7Bb-HzV7m-LgbsSe .oXtfBe-l4eHX .nsm7Bb-HzV7m-LgbsSe-BPrWId{-webkit-flex-grow:0;-webkit-box-flex:0;flex-grow:0}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-MJoBVe{-webkit-transition:background-color .218s;transition:background-color .218s;bottom:0;left:0;position:absolute;right:0;top:0}.nsm7Bb-HzV7m-LgbsSe:focus,.nsm7Bb-HzV7m-LgbsSe:hover{box-shadow:none;border-color:rgb(210,227,252);outline:none}.nsm7Bb-HzV7m-LgbsSe:focus-within{outline:2px solid #00639b;border-color:transparent}.nsm7Bb-HzV7m-LgbsSe:hover .nsm7Bb-HzV7m-LgbsSe-MJoBVe{background:rgba(66,133,244,.08)}.nsm7Bb-HzV7m-LgbsSe:active .nsm7Bb-HzV7m-LgbsSe-MJoBVe,.nsm7Bb-HzV7m-LgbsSe:focus .nsm7Bb-HzV7m-LgbsSe-MJoBVe{background:rgba(66,133,244,.1)}.nsm7Bb-HzV7m-LgbsSe.MFS4be-Ia7Qfc:hover .nsm7Bb-HzV7m-LgbsSe-MJoBVe{background:rgba(255,255,255,.24)}.nsm7Bb-HzV7m-LgbsSe.MFS4be-Ia7Qfc:active .nsm7Bb-HzV7m-LgbsSe-MJoBVe,.nsm7Bb-HzV7m-LgbsSe.MFS4be-Ia7Qfc:focus .nsm7Bb-HzV7m-LgbsSe-MJoBVe{background:rgba(255,255,255,.32)}.nsm7Bb-HzV7m-LgbsSe .n1UuX-DkfjY{border-radius:50%;display:-webkit-box;display:-webkit-flex;display:flex;height:20px;margin-left:-4px;margin-right:8px;min-width:20px;width:20px}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId{font-family:Roboto;font-size:12px;text-align:left}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff .fmcmS,.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId .ssJRIf{overflow:hidden;text-overflow:ellipsis}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-align-items:center;-webkit-box-align:center;align-items:center;color:#5f6368;fill:#5f6368;font-size:11px;font-weight:400}.nsm7Bb-HzV7m-LgbsSe.jVeSEe.MFS4be-Ia7Qfc .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff{color:#e8eaed;fill:#e8eaed}@media screen and (prefers-contrast:more){.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff,.nsm7Bb-HzV7m-LgbsSe.jVeSEe.MFS4be-Ia7Qfc .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff{color:#000;fill:#000}}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff .Bz112c{height:18px;margin:-3px -3px -3px 2px;min-width:18px;width:18px}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-top-left-radius:0;border-bottom-left-radius:0;border-top-right-radius:3px;border-bottom-right-radius:3px;margin-left:12px;margin-right:-10px}.nsm7Bb-HzV7m-LgbsSe.jVeSEe.JGcpL-RbRzK .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-radius:18px}.L5Fo6c-sM5MNb{border:0;display:block;left:0;position:relative;top:0}.L5Fo6c-bF1uUb{border-radius:4px;bottom:0;cursor:pointer;left:0;position:absolute;right:0;top:0}.L5Fo6c-bF1uUb:focus{border:none;outline:none}sentinel{}</style></head>
+<body>
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-title">⚒ Interformes</div>
+      <div class="logo-sub">gestión de obras</div>
+    </div>
+    <div style="padding:10px 12px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:5px">
+      <div id="user-badge" style="display:flex;align-items:center"><span style="font-size:11px;color:var(--text3)">Sin sesión</span></div>
+      <div id="sync-status" style="font-size: 11px; color: var(--accent);">Sin sesión</div>
+      <button id="sync-btn" class="btn btn-ghost btn-sm" style="font-size:11px;padding:5px 8px" onclick="signIn()">☁ Conectar Drive</button>
+    </div>
+    <nav class="nav">
+      <div class="nav-section">Principal</div>
+      <div class="nav-item active" onclick="navigate(&#39;dashboard&#39;)" id="nav-dashboard">
+        <span class="icon">📊</span><span>Dashboard</span>
+      </div>
+      <div class="nav-item" onclick="navigate(&#39;obras&#39;)" id="nav-obras">
+        <span class="icon">🏗️</span><span>Obras</span>
+      </div>
+      <div class="nav-section">Gestión</div>
+      <div class="nav-item" onclick="navigate(&#39;clientes&#39;)" id="nav-clientes">
+        <span class="icon">👤</span><span>Clientes</span>
+      </div>
+      <div class="nav-item" onclick="navigate(&#39;presupuestos&#39;)" id="nav-presupuestos">
+        <span class="icon">📋</span><span>Presupuestos</span>
+      </div>
+      <div class="nav-item" onclick="navigate(&#39;facturas&#39;)" id="nav-facturas">
+        <span class="icon">🧾</span><span>Facturas</span>
+      </div>
+      <div class="nav-item" onclick="navigate(&#39;pagos&#39;)" id="nav-pagos">
+        <span class="icon">💶</span><span>Pagos</span>
+      </div>
+      <div class="nav-section">Recursos</div>
+      <div class="nav-item" onclick="navigate(&#39;personal&#39;)" id="nav-personal">
+        <span class="icon">👷</span><span>Personal</span>
+      </div>
+      <div class="nav-item" onclick="navigate(&#39;herramientas&#39;)" id="nav-herramientas">
+        <span class="icon">🔧</span><span>Herramientas</span>
+      </div>
+      <div class="nav-item" onclick="navigate(&#39;vehiculos&#39;)" id="nav-vehiculos">
+        <span class="icon">🚐</span><span>Vehículos</span>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main" id="main-content">
+    <div class="page-header">
+      <div class="page-title">Dashboard <span>Interformes</span></div>
+      <div class="flex-gap">
+        <button class="btn btn-ghost btn-sm" onclick="loadFromDrive()" title="Forzar recarga desde Drive">⟳ Sync</button>
+        <button class="btn btn-ghost btn-sm" onclick="exportData()">⬇ Exportar</button>
+        <button class="btn btn-ghost btn-sm" onclick="importData()">⬆ Importar</button>
+      </div>
+    </div>
+
+    
+
+    
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Obras activas</div>
+        <div class="stat-value" style="color:var(--blue)">2</div>
+        <div class="stat-sub">0 pendientes de inicio</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total facturado</div>
+        <div class="stat-value" style="color:var(--green)">8500,00 €</div>
+        <div class="stat-sub">0,00 € pendiente de cobro</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Presup. aceptados</div>
+        <div class="stat-value" style="color:var(--accent)">1</div>
+        <div class="stat-sub">1 totales</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Tareas pendientes</div>
+        <div class="stat-value" style="color:var(--orange)">3</div>
+        <div class="stat-sub">en todas las obras</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Material a pedir</div>
+        <div class="stat-value" style="color:var(--purple)">1</div>
+        <div class="stat-sub">líneas pendientes</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Extras pendientes</div>
+        <div class="stat-value" style="color:var(--red)">0</div>
+        <div class="stat-sub">sin aprobar</div>
+      </div>
+    </div>
+
+    <div class="sub-section">
+      <div class="sub-header">
+        <div class="sub-title">Obras recientes</div>
+        <button class="btn btn-ghost btn-sm" onclick="navigate(&#39;obras&#39;)">Ver todas</button>
+      </div>
+      <div class="sub-body">
+        
+          <div class="item-row">
+            <div>
+              <div class="item-name">Piscina</div>
+              <div class="item-meta">Xavier Huguet · Palau Anglesola</div>
+            </div>
+            <div class="flex-gap">
+              <span class="badge badge-blue">En curso</span>
+              <button class="btn btn-ghost btn-sm" onclick="openObra(&#39;mozinjk42ffw&#39;)">Ver</button>
+            </div>
+          </div>
+        
+          <div class="item-row">
+            <div>
+              <div class="item-name">Paeria</div>
+              <div class="item-meta">Nuria i Quim · La Paeria Lleida</div>
+            </div>
+            <div class="flex-gap">
+              <span class="badge badge-blue">En curso</span>
+              <button class="btn btn-ghost btn-sm" onclick="openObra(&#39;mozi2mxaen71&#39;)">Ver</button>
+            </div>
+          </div>
+        
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- BARRA NAVEGACIÓN MÓVIL -->
+<div class="bottom-nav" id="bottom-nav">
+  <div class="bottom-nav-item active" id="bnav-dashboard" onclick="navigate(&#39;dashboard&#39;)">
+    <span class="icon">📊</span><span>Inicio</span>
+  </div>
+  <div class="bottom-nav-item" id="bnav-obras" onclick="navigate(&#39;obras&#39;)">
+    <span class="icon">🏗️</span><span>Obras</span>
+  </div>
+  <div class="bottom-nav-item" id="bnav-clientes" onclick="navigate(&#39;clientes&#39;)">
+    <span class="icon">👤</span><span>Clientes</span>
+  </div>
+  <div class="bottom-nav-item" id="bnav-vehiculos" onclick="navigate(&#39;vehiculos&#39;)">
+    <span class="icon">🚐</span><span>Flota</span>
+  </div>
+  <div class="bottom-nav-item" id="bnav-more" onclick="toggleMoreMenu()">
+    <span class="icon">⋯</span><span>Más</span>
+  </div>
+</div>
+
+<!-- MENÚ "MÁS" MÓVIL -->
+<div class="more-menu hidden" id="more-menu">
+  <div class="more-menu-item" id="mmenu-presupuestos" onclick="navigate(&#39;presupuestos&#39;);toggleMoreMenu()">
+    <span class="icon">📋</span><span>Presupuestos</span>
+  </div>
+  <div class="more-menu-item" id="mmenu-facturas" onclick="navigate(&#39;facturas&#39;);toggleMoreMenu()">
+    <span class="icon">🧾</span><span>Facturas</span>
+  </div>
+  <div class="more-menu-item" id="mmenu-pagos" onclick="navigate(&#39;pagos&#39;);toggleMoreMenu()">
+    <span class="icon">💶</span><span>Pagos</span>
+  </div>
+  <div class="more-menu-item" id="mmenu-personal" onclick="navigate(&#39;personal&#39;);toggleMoreMenu()">
+    <span class="icon">👷</span><span>Personal</span>
+  </div>
+  <div class="more-menu-item" id="mmenu-herramientas" onclick="navigate(&#39;herramientas&#39;);toggleMoreMenu()">
+    <span class="icon">🔧</span><span>Herramientas</span>
+  </div>
+  <div class="more-menu-item" onclick="signIn();toggleMoreMenu()" style="grid-column:1/-1">
+    <span class="icon">☁</span><span id="more-drive-label">Conectar Drive</span>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay hidden" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal-box">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title"></div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer" id="modal-footer"></div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// GOOGLE DRIVE CONFIG
+// ⚠️  Reemplaza CLIENT_ID con el tuyo de Google Cloud Console
+// ============================================================
+const GD_CLIENT_ID = '892926973498-6k2ilpgc8kqlgrmiqs82oln9kifbvb2d.apps.googleusercontent.com';
+const GD_SCOPE = 'https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/drive.file';
+const GD_FILE_NAME = 'interformes-data.json';
+
+// ============================================================
+// DATA STORE — localStorage como caché + Google Drive como sync
+// ============================================================
+const DB = {
+  load(key) { try { return JSON.parse(localStorage.getItem('if_' + key)) || []; } catch { return []; } },
+  save(key, val) { localStorage.setItem('if_' + key, JSON.stringify(val)); },
+  id() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); },
+  loadAll() {
+    return {
+      clientes: this.load('clientes'), obras: this.load('obras'),
+      presupuestos: this.load('presupuestos'), facturas: this.load('facturas'),
+      pagos: this.load('pagos'), personal: this.load('personal'),
+      herramientas: this.load('herramientas'), vehiculos: this.load('vehiculos'),
+    };
+  },
+  saveAll(obj) {
+    Object.keys(obj).forEach(k => this.save(k, obj[k]));
+  }
+};
+
+let data = DB.loadAll();
+
+// Guarda localmente y programa sync con Drive
+function save(key) {
+  DB.save(key, data[key]);
+  scheduleDriveSync();
+}
+
+function scheduleDriveSync() {
+  if (!gdReady) return;
+  clearTimeout(syncTimeout);
+  syncTimeout = setTimeout(syncToDrive, 1500);
+}
+
+// ============================================================
+// GOOGLE DRIVE AUTH & SYNC — Google Identity Services (GIS)
+// ============================================================
+let gdToken = null;
+let gdFileId = null;
+let gdReady = false;
+let syncTimeout = null;
+
+function initGoogleDrive() {
+  // Cargar gapi (para Drive API)
+  const s1 = document.createElement('script');
+  s1.src = 'https://apis.google.com/js/api.js';
+  s1.onload = () => {
+    gapi.load('client', async () => {
+      await gapi.client.init({});
+      await gapi.client.load('https://www.googleapis.com/discovery/v1/apis/drive/v3/rest');
+    });
+  };
+  document.head.appendChild(s1);
+
+  // Cargar GIS (para auth)
+  const s2 = document.createElement('script');
+  s2.src = 'https://accounts.google.com/gsi/client';
+  document.head.appendChild(s2);
+
+  showSyncStatus('Sin sesión', 'warn');
+}
+
+function signIn() {
+  const client = google.accounts.oauth2.initTokenClient({
+    client_id: GD_CLIENT_ID,
+    scope: GD_SCOPE,
+    callback: async (resp) => {
+      if (resp.error) { showSyncStatus('Error auth', 'error'); return; }
+      gdToken = resp.access_token;
+      gapi.client.setToken({ access_token: gdToken });
+      gdReady = true;
+      const email = await getEmail();
+      updateUserBadge(email);
+      showSyncStatus('✓ ' + (email || 'Conectado'), 'ok');
+      renderSyncButton();
+      await loadFromDrive();
+    },
+  });
+  client.requestAccessToken();
+}
+
+async function getEmail() {
+  try {
+    const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+      headers: { Authorization: 'Bearer ' + gdToken }
+    });
+    const u = await res.json();
+    return u.email || '';
+  } catch { return ''; }
+}
+
+async function signOut() {
+  if (gdToken) google.accounts.oauth2.revoke(gdToken);
+  gdToken = null; gdReady = false; gdFileId = null;
+  gapi.client.setToken(null);
+  showSyncStatus('Sin sesión', 'warn');
+  updateUserBadge(null);
+  renderSyncButton();
+}
+
+async function loadFromDrive() {
+  if (!gdReady) return;
+  showSyncStatus('⟳ Cargando...', 'sync');
+  try {
+    const res = await gapi.client.drive.files.list({
+      spaces: 'appDataFolder',
+      q: "name='" + GD_FILE_NAME + "'",
+      fields: 'files(id,name)',
+    });
+    const files = res.result.files;
+    if (files && files.length > 0) {
+      gdFileId = files[0].id;
+      const content = await fetch('https://www.googleapis.com/drive/v3/files/' + gdFileId + '?alt=media', {
+        headers: { Authorization: 'Bearer ' + gdToken }
+      });
+      const imported = await content.json();
+      DB.saveAll(imported);
+      data = DB.loadAll();
+      render();
+      showSyncStatus('✓ Sincronizado ' + new Date().toLocaleTimeString('es-ES', {hour:'2-digit',minute:'2-digit'}), 'ok');
+    } else {
+      await syncToDrive();
+    }
+  } catch(e) {
+    showSyncStatus('Error Drive', 'error');
+    console.error(e);
+  }
+}
+
+async function syncToDrive() {
+  if (!gdReady || !gdToken) return;
+  showSyncStatus('⟳ Guardando...', 'sync');
+  const content = JSON.stringify(data);
+  try {
+    if (gdFileId) {
+      await fetch('https://www.googleapis.com/upload/drive/v3/files/' + gdFileId + '?uploadType=media', {
+        method: 'PATCH',
+        headers: { Authorization: 'Bearer ' + gdToken, 'Content-Type': 'application/json' },
+        body: content,
+      });
+    } else {
+      const meta = { name: GD_FILE_NAME, parents: ['appDataFolder'] };
+      const form = new FormData();
+      form.append('metadata', new Blob([JSON.stringify(meta)], { type: 'application/json' }));
+      form.append('file', new Blob([content], { type: 'application/json' }));
+      const res = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+        method: 'POST',
+        headers: { Authorization: 'Bearer ' + gdToken },
+        body: form,
+      });
+      const json = await res.json();
+      gdFileId = json.id;
+    }
+    showSyncStatus('✓ Guardado ' + new Date().toLocaleTimeString('es-ES', {hour:'2-digit',minute:'2-digit'}), 'ok');
+  } catch(e) {
+    showSyncStatus('Error guardando', 'error');
+    console.error(e);
+  }
+}
+
+function scheduleDriveSync() {
+  if (!gdReady) return;
+  clearTimeout(syncTimeout);
+  syncTimeout = setTimeout(syncToDrive, 1500);
+}
+
+function showSyncStatus(msg, type) {
+  const el = document.getElementById('sync-status');
+  if (!el) return;
+  const colors = { ok: 'var(--green)', warn: 'var(--accent)', error: 'var(--red)', sync: 'var(--blue)' };
+  el.textContent = msg;
+  el.style.color = colors[type] || 'var(--text2)';
+}
+
+function renderSyncButton() {
+  const el = document.getElementById('sync-btn');
+  if (!el) return;
+  if (gdReady) {
+    el.textContent = '⏏ Cerrar sesión';
+    el.onclick = signOut;
+  } else {
+    el.textContent = '☁ Conectar Drive';
+    el.onclick = signIn;
+  }
+}
+
+function updateUserBadge(email) {
+  const el = document.getElementById('user-badge');
+  if (!el) return;
+  el.innerHTML = email
+    ? '<span style="font-size:11px;color:var(--text2)">✓ ' + email.split('@')[0] + '</span>'
+    : '<span style="font-size:11px;color:var(--text3)">Sin sesión</span>';
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+let currentPage = 'dashboard';
+
+function navigate(page) {
+  currentPage = page;
+  // Sidebar desktop
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  const nav = document.getElementById('nav-' + page);
+  if (nav) nav.classList.add('active');
+  // Bottom nav móvil
+  document.querySelectorAll('.bottom-nav-item').forEach(el => el.classList.remove('active'));
+  const bnav = document.getElementById('bnav-' + page);
+  if (bnav) bnav.classList.add('active');
+  // Menú más
+  document.querySelectorAll('.more-menu-item').forEach(el => el.classList.remove('active'));
+  const mmenu = document.getElementById('mmenu-' + page);
+  if (mmenu) mmenu.classList.add('active');
+  render();
+}
+
+function toggleMoreMenu() {
+  const m = document.getElementById('more-menu');
+  if (m) m.classList.toggle('hidden');
+}
+
+function render() {
+  const pages = {
+    dashboard: renderDashboard,
+    obras: renderObras,
+    clientes: renderClientes,
+    presupuestos: renderPresupuestos,
+    facturas: renderFacturas,
+    pagos: renderPagos,
+    personal: renderPersonal,
+    herramientas: renderHerramientas,
+    vehiculos: renderVehiculos,
+  };
+  const fn = pages[currentPage];
+  if (fn) document.getElementById('main-content').innerHTML = fn();
+  bindEvents();
+}
+
+// ============================================================
+// HELPERS
+// ============================================================
+function fmt(n) {
+  if (n == null || n === '') return '—';
+  return Number(n).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+}
+function fmtDate(d) { if (!d) return '—'; return new Date(d).toLocaleDateString('es-ES'); }
+function clienteName(id) { const c = data.clientes.find(x => x.id === id); return c ? c.nombre : '—'; }
+function obraName(id) { const o = data.obras.find(x => x.id === id); return o ? o.nombre : '—'; }
+
+const ESTADOS_OBRA = ['Pendiente', 'En curso', 'Pausada', 'Terminada', 'Cancelada'];
+const ESTADOS_BADGE = { 'Pendiente': 'badge-gray', 'En curso': 'badge-blue', 'Pausada': 'badge-yellow', 'Terminada': 'badge-green', 'Cancelada': 'badge-red' };
+const ESTADOS_PAGO = { 'Pendiente': 'badge-yellow', 'Cobrado': 'badge-green', 'Parcial': 'badge-orange', 'Impagado': 'badge-red' };
+const ESTADOS_PRESUP = { 'Borrador': 'badge-gray', 'Enviado': 'badge-blue', 'Aceptado': 'badge-green', 'Rechazado': 'badge-red' };
+const ESTADOS_FACT = { 'Emitida': 'badge-blue', 'Cobrada': 'badge-green', 'Vencida': 'badge-red', 'Parcial': 'badge-orange' };
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+function renderDashboard() {
+  const obrasActivas = data.obras.filter(o => o.estado === 'En curso').length;
+  const obrasPendientes = data.obras.filter(o => o.estado === 'Pendiente').length;
+  const totalFacturado = data.facturas.reduce((s, f) => s + Number(f.importe || 0), 0);
+  const pendienteCobro = data.facturas.filter(f => f.estado !== 'Cobrada').reduce((s, f) => s + Number(f.importe || 0), 0);
+  const presupAceptados = data.presupuestos.filter(p => p.estado === 'Aceptado').length;
+
+  // Tareas pendientes de todas las obras
+  let tareasPendientes = 0;
+  let materialPendiente = 0;
+  let extrasPendientes = 0;
+  data.obras.forEach(o => {
+    tareasPendientes += (o.tareas || []).filter(t => !t.done).length;
+    materialPendiente += (o.materiales || []).filter(m => !m.pedido).length;
+    extrasPendientes += (o.extras || []).filter(e => !e.aprobado).length;
+  });
+
+  const obrasRecientes = data.obras.slice(-5).reverse();
+
+  // Alertas de vehículos
+  const alertasVehiculos = [];
+  (data.vehiculos || []).forEach(v => {
+    ['itvFecha', 'seguroFecha', 'revisionFecha'].forEach(campo => {
+      if (!v[campo]) return;
+      const d = daysDiff(v[campo]);
+      const label = campo === 'itvFecha' ? 'ITV' : campo === 'seguroFecha' ? 'Seguro' : 'Revisión';
+      if (d < 0) alertasVehiculos.push({ v, label, texto: label + ' vencida', urgente: true });
+      else if (d <= 30) alertasVehiculos.push({ v, label, texto: label + ' vence en ' + d + ' días (' + fmtDate(v[campo]) + ')', urgente: d <= 15 });
+    });
+  });
+
+  return `
+    <div class="page-header">
+      <div class="page-title">Dashboard <span>Interformes</span></div>
+      <div class="flex-gap">
+        <button class="btn btn-ghost btn-sm" onclick="loadFromDrive()" title="Forzar recarga desde Drive">⟳ Sync</button>
+        <button class="btn btn-ghost btn-sm" onclick="exportData()">⬇ Exportar</button>
+        <button class="btn btn-ghost btn-sm" onclick="importData()">⬆ Importar</button>
+      </div>
+    </div>
+
+    ${GD_CLIENT_ID === 'TU_CLIENT_ID_AQUI.apps.googleusercontent.com' ? `
+    <div class="alert" style="margin-bottom:20px">
+      <strong>☁ Configurar sincronización con Google Drive</strong><br><br>
+      Para sincronizar entre PC y móvil sigue estos pasos:<br><br>
+      <strong>1.</strong> Ve a <a href="https://console.cloud.google.com" target="_blank" style="color:var(--accent)">console.cloud.google.com</a> e inicia sesión<br>
+      <strong>2.</strong> Crea un proyecto nuevo (ej: "Interformes")<br>
+      <strong>3.</strong> Ve a <em>APIs y servicios → Credenciales → Crear credencial → ID de cliente OAuth 2.0</em><br>
+      <strong>4.</strong> Tipo de aplicación: <strong>Aplicación web</strong><br>
+      <strong>5.</strong> En "Orígenes autorizados" añade: <code style="background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:4px">file://</code> y la URL donde tengas la app<br>
+      <strong>6.</strong> Copia el <strong>Client ID</strong> generado<br>
+      <strong>7.</strong> Abre el archivo HTML con un editor de texto, busca <code style="background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:4px">TU_CLIENT_ID_AQUI</code> y reemplázalo por tu Client ID<br>
+      <strong>8.</strong> Activa la API de Google Drive en <em>APIs y servicios → Biblioteca</em><br><br>
+      <span style="color:var(--text2);font-size:12px">Mientras tanto la app funciona perfectamente en local.</span>
+    </div>
+    ` : ''}
+
+    ${alertasVehiculos.length > 0 ? `
+    <div class="alert" style="margin-bottom:20px;cursor:pointer" onclick="navigate('vehiculos')">
+      🚐 <strong>${alertasVehiculos.length} alerta${alertasVehiculos.length>1?'s':''} de flota</strong> — haz clic para ver
+      ${alertasVehiculos.map(a => `<br><span style="color:${a.urgente?'var(--red)':'var(--accent)'}">· ${a.v.nombre} (${a.v.matricula||'—'}): ${a.texto}</span>`).join('')}
+    </div>` : ''}
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Obras activas</div>
+        <div class="stat-value" style="color:var(--blue)">${obrasActivas}</div>
+        <div class="stat-sub">${obrasPendientes} pendientes de inicio</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total facturado</div>
+        <div class="stat-value" style="color:var(--green)">${fmt(totalFacturado)}</div>
+        <div class="stat-sub">${fmt(pendienteCobro)} pendiente de cobro</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Presup. aceptados</div>
+        <div class="stat-value" style="color:var(--accent)">${presupAceptados}</div>
+        <div class="stat-sub">${data.presupuestos.length} totales</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Tareas pendientes</div>
+        <div class="stat-value" style="color:var(--orange)">${tareasPendientes}</div>
+        <div class="stat-sub">en todas las obras</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Material a pedir</div>
+        <div class="stat-value" style="color:var(--purple)">${materialPendiente}</div>
+        <div class="stat-sub">líneas pendientes</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Extras pendientes</div>
+        <div class="stat-value" style="color:var(--red)">${extrasPendientes}</div>
+        <div class="stat-sub">sin aprobar</div>
+      </div>
+    </div>
+
+    <div class="sub-section">
+      <div class="sub-header">
+        <div class="sub-title">Obras recientes</div>
+        <button class="btn btn-ghost btn-sm" onclick="navigate('obras')">Ver todas</button>
+      </div>
+      <div class="sub-body">
+        ${obrasRecientes.length === 0 ? '<div class="empty-state">No hay obras todavía</div>' : obrasRecientes.map(o => `
+          <div class="item-row">
+            <div>
+              <div class="item-name">${o.nombre}</div>
+              <div class="item-meta">${clienteName(o.clienteId)} · ${o.ubicacion || '—'}</div>
+            </div>
+            <div class="flex-gap">
+              <span class="badge ${ESTADOS_BADGE[o.estado] || 'badge-gray'}">${o.estado}</span>
+              <button class="btn btn-ghost btn-sm" onclick="openObra('${o.id}')">Ver</button>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// CLIENTES
+// ============================================================
+function renderClientes() {
+  const q = '';
+  return `
+    <div class="page-header">
+      <div class="page-title"><span>Clientes</span></div>
+      <button class="btn btn-primary" onclick="modalCliente()">+ Nuevo cliente</button>
+    </div>
+    <div class="table-wrap">
+      <div class="table-toolbar">
+        <input class="search-input" id="search-clientes" placeholder="Buscar cliente..." oninput="filterTable('clientes')" />
+        <span style="color:var(--text3);font-size:12px">${data.clientes.length} clientes</span>
+      </div>
+      <table>
+        <thead><tr>
+          <th>Nombre</th><th>Teléfono</th><th>Email</th><th>NIF/CIF</th><th>Obras</th><th></th>
+        </tr></thead>
+        <tbody id="tbody-clientes">
+          ${data.clientes.length === 0 ? '<tr><td colspan="6" class="text-center" style="padding:32px;color:var(--text3)">No hay clientes</td></tr>' :
+            data.clientes.map(c => {
+              const nObras = data.obras.filter(o => o.clienteId === c.id).length;
+              return `<tr class="cliente-row" data-search="${(c.nombre + c.email + c.telefono).toLowerCase()}">
+                <td><strong>${c.nombre}</strong></td>
+                <td>${c.telefono || '—'}</td>
+                <td>${c.email || '—'}</td>
+                <td><span class="money">${c.nif || '—'}</span></td>
+                <td><span class="badge badge-blue">${nObras}</span></td>
+                <td><div class="td-actions">
+                  <button class="btn btn-ghost btn-sm" onclick="modalCliente('${c.id}')">✏️</button>
+                  <button class="btn btn-danger btn-sm" onclick="deleteItem('clientes','${c.id}')">🗑</button>
+                </div></td>
+              </tr>`;
+            }).join('')
+          }
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function modalCliente(id) {
+  const c = id ? data.clientes.find(x => x.id === id) : {};
+  const v = c || {};
+  openModal(id ? 'Editar cliente' : 'Nuevo cliente', `
+    <div class="form-grid">
+      <div class="form-group full"><label>Nombre completo / Empresa *</label><input id="f-nombre" value="${v.nombre||''}" placeholder="Josep García..." /></div>
+      <div class="form-group"><label>Teléfono</label><input id="f-telefono" value="${v.telefono||''}" placeholder="600 000 000" /></div>
+      <div class="form-group"><label>Email</label><input id="f-email" value="${v.email||''}" placeholder="correo@email.com" /></div>
+      <div class="form-group"><label>NIF / CIF</label><input id="f-nif" value="${v.nif||''}" /></div>
+      <div class="form-group"><label>Dirección</label><input id="f-direccion" value="${v.direccion||''}" /></div>
+      <div class="form-group full"><label>Notas</label><textarea id="f-notas">${v.notas||''}</textarea></div>
+    </div>
+  `, () => {
+    const nombre = document.getElementById('f-nombre').value.trim();
+    if (!nombre) return alert('El nombre es obligatorio');
+    const obj = { id: id || DB.id(), nombre, telefono: g('f-telefono'), email: g('f-email'), nif: g('f-nif'), direccion: g('f-direccion'), notas: g('f-notas') };
+    if (id) { const i = data.clientes.findIndex(x => x.id === id); data.clientes[i] = obj; }
+    else data.clientes.push(obj);
+    save('clientes'); closeModal(); render();
+  });
+}
+
+// ============================================================
+// OBRAS
+// ============================================================
+function renderObras() {
+  return `
+    <div class="page-header">
+      <div class="page-title"><span>Obras</span></div>
+      <button class="btn btn-primary" onclick="modalObra()">+ Nueva obra</button>
+    </div>
+    <div class="table-wrap">
+      <div class="table-toolbar">
+        <input class="search-input" id="search-obras" placeholder="Buscar obra..." oninput="filterTable('obras')" />
+        <span style="color:var(--text3);font-size:12px">${data.obras.length} obras</span>
+      </div>
+      <table>
+        <thead><tr>
+          <th>Obra</th><th>Cliente</th><th>Ubicación</th><th>Estado</th><th>Inicio</th><th>Fin prev.</th><th></th>
+        </tr></thead>
+        <tbody id="tbody-obras">
+          ${data.obras.length === 0 ? '<tr><td colspan="7" class="text-center" style="padding:32px;color:var(--text3)">No hay obras</td></tr>' :
+            data.obras.slice().reverse().map(o => `<tr class="obra-row" data-search="${(o.nombre + clienteName(o.clienteId) + (o.ubicacion||'')).toLowerCase()}">
+              <td><strong>${o.nombre}</strong></td>
+              <td>${clienteName(o.clienteId)}</td>
+              <td>${o.ubicacion || '—'}</td>
+              <td><span class="badge ${ESTADOS_BADGE[o.estado] || 'badge-gray'}">${o.estado}</span></td>
+              <td>${fmtDate(o.fechaInicio)}</td>
+              <td>${fmtDate(o.fechaFin)}</td>
+              <td><div class="td-actions">
+                <button class="btn btn-primary btn-sm" onclick="openObra('${o.id}')">Ver</button>
+                <button class="btn btn-ghost btn-sm" onclick="modalObra('${o.id}')">✏️</button>
+                <button class="btn btn-danger btn-sm" onclick="deleteItem('obras','${o.id}')">🗑</button>
+              </div></td>
+            </tr>`).join('')
+          }
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function modalObra(id) {
+  const o = id ? data.obras.find(x => x.id === id) : {};
+  const v = o || {};
+  const clienteOpts = data.clientes.map(c => `<option value="${c.id}" ${v.clienteId===c.id?'selected':''}>${c.nombre}</option>`).join('');
+  const estadoOpts = ESTADOS_OBRA.map(e => `<option value="${e}" ${v.estado===e?'selected':''}>${e}</option>`).join('');
+  openModal(id ? 'Editar obra' : 'Nueva obra', `
+    <div class="form-grid">
+      <div class="form-group full"><label>Nombre de la obra *</label><input id="f-nombre" value="${v.nombre||''}" placeholder="Reforma baño calle Major..." /></div>
+      <div class="form-group"><label>Cliente</label><select id="f-clienteId"><option value="">Sin cliente</option>${clienteOpts}</select></div>
+      <div class="form-group"><label>Estado</label><select id="f-estado">${estadoOpts}</select></div>
+      <div class="form-group full"><label>Ubicación / Dirección</label><input id="f-ubicacion" value="${v.ubicacion||''}" /></div>
+      <div class="form-group"><label>Fecha inicio</label><input type="date" id="f-fechaInicio" value="${v.fechaInicio||''}" /></div>
+      <div class="form-group"><label>Fecha fin prevista</label><input type="date" id="f-fechaFin" value="${v.fechaFin||''}" /></div>
+      <div class="form-group full"><label>Descripción / Alcance</label><textarea id="f-descripcion">${v.descripcion||''}</textarea></div>
+    </div>
+  `, () => {
+    const nombre = g('f-nombre');
+    if (!nombre) return alert('El nombre es obligatorio');
+    const obj = {
+      id: id || DB.id(), nombre,
+      clienteId: g('f-clienteId'), estado: g('f-estado'),
+      ubicacion: g('f-ubicacion'), fechaInicio: g('f-fechaInicio'), fechaFin: g('f-fechaFin'),
+      descripcion: g('f-descripcion'),
+      tareas: v.tareas || [], materiales: v.materiales || [],
+      personal: v.personal || [], herramientas: v.herramientas || [],
+      extras: v.extras || [], cambios: v.cambios || [],
+    };
+    if (id) { const i = data.obras.findIndex(x => x.id === id); data.obras[i] = obj; }
+    else data.obras.push(obj);
+    save('obras'); closeModal(); render();
+  });
+}
+
+// ============================================================
+// DETALLE DE OBRA
+// ============================================================
+function openObra(id) {
+  const o = data.obras.find(x => x.id === id);
+  if (!o) return;
+  currentPage = 'obra-detail';
+  currentObraId = id;
+  document.getElementById('main-content').innerHTML = renderObraDetail(o);
+  bindEvents();
+}
+
+let currentObraId = null;
+
+function renderObraDetail(o) {
+  const tareas = o.tareas || [];
+  const materiales = o.materiales || [];
+  const personal = o.personal || [];
+  const herramientas = o.herramientas || [];
+  const extras = o.extras || [];
+  const cambios = o.cambios || [];
+
+  const personalNames = (o.personal || []).map(pid => {
+    const p = data.personal.find(x => x.id === pid);
+    return p ? `<span class="chip">${p.nombre}</span>` : '';
+  }).join('');
+
+  const herramientasChips = (o.herramientas || []).map(hid => {
+    const h = data.herramientas.find(x => x.id === hid);
+    return h ? `<span class="chip">${h.nombre}</span>` : '';
+  }).join('');
+
+  return `
+    <div class="page-header">
+      <div>
+        <button class="btn btn-ghost btn-sm" onclick="navigate('obras')" style="margin-bottom:8px">← Volver</button>
+        <div class="page-title">${o.nombre} <span class="badge ${ESTADOS_BADGE[o.estado]||'badge-gray'}" style="font-size:14px;vertical-align:middle">${o.estado}</span></div>
+        <div style="color:var(--text2);font-size:13px;margin-top:4px">${clienteName(o.clienteId)} · ${o.ubicacion||'—'}</div>
+      </div>
+      <div class="flex-gap">
+        <button class="btn btn-ghost btn-sm" onclick="modalObra('${o.id}')">✏️ Editar obra</button>
+      </div>
+    </div>
+
+    <div class="detail-grid">
+      <div class="detail-card">
+        <div class="detail-card-title">Info general</div>
+        <div class="detail-row"><span class="detail-key">Estado</span><span class="detail-val"><span class="badge ${ESTADOS_BADGE[o.estado]||'badge-gray'}">${o.estado}</span></span></div>
+        <div class="detail-row"><span class="detail-key">Inicio</span><span class="detail-val">${fmtDate(o.fechaInicio)}</span></div>
+        <div class="detail-row"><span class="detail-key">Fin previsto</span><span class="detail-val">${fmtDate(o.fechaFin)}</span></div>
+        <div class="detail-row"><span class="detail-key">Ubicación</span><span class="detail-val">${o.ubicacion||'—'}</span></div>
+      </div>
+      <div class="detail-card">
+        <div class="detail-card-title">Finanzas</div>
+        ${(() => {
+          const pres = data.presupuestos.filter(p => p.obraId === o.id);
+          const facts = data.facturas.filter(f => f.obraId === o.id);
+          const pagosObj = data.pagos.filter(p => p.obraId === o.id);
+          const totalPres = pres.reduce((s, p) => s + Number(p.importe||0), 0);
+          const totalFact = facts.reduce((s, f) => s + Number(f.importe||0), 0);
+          const totalPagado = pagosObj.reduce((s, p) => s + Number(p.importe||0), 0);
+          return `
+            <div class="detail-row"><span class="detail-key">Presupuesto</span><span class="detail-val money">${fmt(totalPres)}</span></div>
+            <div class="detail-row"><span class="detail-key">Facturado</span><span class="detail-val money">${fmt(totalFact)}</span></div>
+            <div class="detail-row"><span class="detail-key">Cobrado</span><span class="detail-val money money-pos">${fmt(totalPagado)}</span></div>
+            <div class="detail-row"><span class="detail-key">Pendiente</span><span class="detail-val money money-neg">${fmt(totalFact - totalPagado)}</span></div>
+          `;
+        })()}
+      </div>
+    </div>
+
+    ${o.descripcion ? `<div class="alert" style="background:rgba(59,130,246,0.1);border-color:rgba(59,130,246,0.3);color:var(--blue)">📝 ${o.descripcion}</div>` : ''}
+
+    <!-- PERSONAL -->
+    <div class="sub-section">
+      <div class="sub-header">
+        <div class="sub-title">👷 Personal asignado</div>
+        <button class="btn btn-ghost btn-sm" onclick="modalAsignarPersonal('${o.id}')">+ Asignar</button>
+      </div>
+      <div class="sub-body">
+        ${personal.length === 0 ? '<div class="empty-state">Ningún trabajador asignado</div>' :
+          `<div class="chips">${personalNames}</div>
+          <div style="margin-top:12px">${personal.map(pid => {
+            const p = data.personal.find(x => x.id === pid);
+            if (!p) return '';
+            return `<div class="item-row">
+              <div><div class="item-name">${p.nombre}</div><div class="item-meta">${p.cargo||'—'} · ${p.telefono||'—'}</div></div>
+              <button class="btn btn-danger btn-sm" onclick="desasignarPersonal('${o.id}','${pid}')">Quitar</button>
+            </div>`;
+          }).join('')}</div>`
+        }
+      </div>
+    </div>
+
+    <!-- HERRAMIENTAS -->
+    <div class="sub-section">
+      <div class="sub-header">
+        <div class="sub-title">🔧 Herramientas asignadas</div>
+        <button class="btn btn-ghost btn-sm" onclick="modalAsignarHerramienta('${o.id}')">+ Asignar</button>
+      </div>
+      <div class="sub-body">
+        ${herramientas.length === 0 ? '<div class="empty-state">Ninguna herramienta asignada</div>' :
+          herramientas.map(hid => {
+            const h = data.herramientas.find(x => x.id === hid);
+            if (!h) return '';
+            return `<div class="item-row">
+              <div><div class="item-name">${h.nombre}</div><div class="item-meta">${h.tipo||'—'} · ${h.codigo||''}</div></div>
+              <button class="btn btn-danger btn-sm" onclick="desasignarHerramienta('${o.id}','${hid}')">Quitar</button>
+            </div>`;
+          }).join('')
+        }
+      </div>
+    </div>
+
+    <!-- TAREAS -->
+    <div class="sub-section">
+      <div class="sub-header">
+        <div class="sub-title">✅ Trabajo a realizar</div>
+        <button class="btn btn-ghost btn-sm" onclick="modalTarea('${o.id}')">+ Añadir tarea</button>
+      </div>
+      <div class="sub-body">
+        ${tareas.length === 0 ? '<div class="empty-state">No hay tareas</div>' :
+          tareas.map((t, i) => `
+            <div class="checklist-item">
+              <input type="checkbox" ${t.done?'checked':''} onchange="toggleTarea('${o.id}',${i})" />
+              <div style="flex:1">
+                <span class="checklist-text ${t.done?'done':''}">${t.texto}</span>
+                ${t.responsable ? `<span style="font-size:11px;color:var(--text3);margin-left:8px">· ${t.responsable}</span>` : ''}
+              </div>
+              <span class="badge ${t.prioridad==='Alta'?'badge-red':t.prioridad==='Media'?'badge-yellow':'badge-gray'} checklist-priority">${t.prioridad||'Normal'}</span>
+              <button class="btn btn-danger btn-sm" onclick="deleteTarea('${o.id}',${i})">🗑</button>
+            </div>
+          `).join('')
+        }
+      </div>
+    </div>
+
+    <!-- MATERIAL -->
+    <div class="sub-section">
+      <div class="sub-header">
+        <div class="sub-title">📦 Material a pedir</div>
+        <button class="btn btn-ghost btn-sm" onclick="modalMaterial('${o.id}')">+ Añadir material</button>
+      </div>
+      <div class="sub-body">
+        ${materiales.length === 0 ? '<div class="empty-state">No hay material pendiente</div>' :
+          materiales.map((m, i) => `
+            <div class="item-row">
+              <div>
+                <div class="item-name">${m.nombre} <span class="badge ${m.pedido?'badge-green':'badge-yellow'}">${m.pedido?'Pedido':'Pendiente'}</span></div>
+                <div class="item-meta">Cant: ${m.cantidad||'—'} · Proveedor: ${m.proveedor||'—'} · ${fmt(m.precio)}</div>
+              </div>
+              <div class="td-actions">
+                ${!m.pedido ? `<button class="btn btn-ghost btn-sm" onclick="marcarPedido('${o.id}',${i})">✓ Pedido</button>` : ''}
+                <button class="btn btn-danger btn-sm" onclick="deleteMaterial('${o.id}',${i})">🗑</button>
+              </div>
+            </div>
+          `).join('')
+        }
+      </div>
+    </div>
+
+    <!-- EXTRAS / CAMBIOS -->
+    <div class="sub-section">
+      <div class="sub-header">
+        <div class="sub-title">⚡ Extras y cambios del cliente</div>
+        <button class="btn btn-ghost btn-sm" onclick="modalExtra('${o.id}')">+ Añadir extra</button>
+      </div>
+      <div class="sub-body">
+        ${extras.length === 0 ? '<div class="empty-state">No hay extras registrados</div>' :
+          extras.map((e, i) => `
+            <div class="item-row">
+              <div>
+                <div class="item-name">${e.descripcion} <span class="badge ${e.aprobado?'badge-green':'badge-orange'}">${e.aprobado?'Aprobado':'Pendiente'}</span></div>
+                <div class="item-meta">Importe: ${fmt(e.importe)} · ${e.fecha?fmtDate(e.fecha):''}</div>
+              </div>
+              <div class="td-actions">
+                ${!e.aprobado ? `<button class="btn btn-ghost btn-sm" onclick="aprobarExtra('${o.id}',${i})">✓ Aprobar</button>` : ''}
+                <button class="btn btn-danger btn-sm" onclick="deleteExtra('${o.id}',${i})">🗑</button>
+              </div>
+            </div>
+          `).join('')
+        }
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// OBRA SUB-ACTIONS
+// ============================================================
+function toggleTarea(obraId, i) {
+  const o = data.obras.find(x => x.id === obraId);
+  o.tareas[i].done = !o.tareas[i].done;
+  save('obras'); openObra(obraId);
+}
+function deleteTarea(obraId, i) {
+  const o = data.obras.find(x => x.id === obraId);
+  o.tareas.splice(i, 1);
+  save('obras'); openObra(obraId);
+}
+function marcarPedido(obraId, i) {
+  const o = data.obras.find(x => x.id === obraId);
+  o.materiales[i].pedido = true;
+  save('obras'); openObra(obraId);
+}
+function deleteMaterial(obraId, i) {
+  const o = data.obras.find(x => x.id === obraId);
+  o.materiales.splice(i, 1);
+  save('obras'); openObra(obraId);
+}
+function aprobarExtra(obraId, i) {
+  const o = data.obras.find(x => x.id === obraId);
+  o.extras[i].aprobado = true;
+  save('obras'); openObra(obraId);
+}
+function deleteExtra(obraId, i) {
+  const o = data.obras.find(x => x.id === obraId);
+  o.extras.splice(i, 1);
+  save('obras'); openObra(obraId);
+}
+function desasignarPersonal(obraId, pid) {
+  const o = data.obras.find(x => x.id === obraId);
+  o.personal = o.personal.filter(x => x !== pid);
+  save('obras'); openObra(obraId);
+}
+function desasignarHerramienta(obraId, hid) {
+  const o = data.obras.find(x => x.id === obraId);
+  o.herramientas = o.herramientas.filter(x => x !== hid);
+  save('obras'); openObra(obraId);
+}
+
+function modalTarea(obraId) {
+  openModal('Nueva tarea', `
+    <div class="form-grid cols-1">
+      <div class="form-group"><label>Descripción de la tarea *</label><input id="f-texto" placeholder="Ej: Picar pared cocina..." /></div>
+      <div class="form-group"><label>Responsable</label><input id="f-responsable" placeholder="Nombre del trabajador" /></div>
+      <div class="form-group"><label>Prioridad</label><select id="f-prioridad"><option>Normal</option><option>Media</option><option>Alta</option></select></div>
+    </div>
+  `, () => {
+    const texto = g('f-texto');
+    if (!texto) return alert('Descripción obligatoria');
+    const o = data.obras.find(x => x.id === obraId);
+    o.tareas.push({ texto, responsable: g('f-responsable'), prioridad: g('f-prioridad'), done: false });
+    save('obras'); closeModal(); openObra(obraId);
+  });
+}
+
+function modalMaterial(obraId) {
+  openModal('Añadir material', `
+    <div class="form-grid">
+      <div class="form-group full"><label>Material *</label><input id="f-nombre" placeholder="Ej: Cemento cola, azulejos..." /></div>
+      <div class="form-group"><label>Cantidad</label><input id="f-cantidad" placeholder="Ej: 20 sacos" /></div>
+      <div class="form-group"><label>Precio estimado (€)</label><input type="number" id="f-precio" placeholder="0.00" /></div>
+      <div class="form-group full"><label>Proveedor</label><input id="f-proveedor" placeholder="Ej: Bricomart Lleida" /></div>
+    </div>
+  `, () => {
+    const nombre = g('f-nombre');
+    if (!nombre) return alert('Material obligatorio');
+    const o = data.obras.find(x => x.id === obraId);
+    o.materiales.push({ nombre, cantidad: g('f-cantidad'), precio: g('f-precio'), proveedor: g('f-proveedor'), pedido: false });
+    save('obras'); closeModal(); openObra(obraId);
+  });
+}
+
+function modalExtra(obraId) {
+  openModal('Añadir extra / cambio', `
+    <div class="form-grid">
+      <div class="form-group full"><label>Descripción del extra *</label><textarea id="f-descripcion" placeholder="Ej: Cliente pide ampliar ventana del salón..."></textarea></div>
+      <div class="form-group"><label>Importe extra (€)</label><input type="number" id="f-importe" placeholder="0.00" /></div>
+      <div class="form-group"><label>Fecha</label><input type="date" id="f-fecha" /></div>
+    </div>
+  `, () => {
+    const descripcion = g('f-descripcion');
+    if (!descripcion) return alert('Descripción obligatoria');
+    const o = data.obras.find(x => x.id === obraId);
+    o.extras.push({ descripcion, importe: g('f-importe'), fecha: g('f-fecha'), aprobado: false });
+    save('obras'); closeModal(); openObra(obraId);
+  });
+}
+
+function modalAsignarPersonal(obraId) {
+  const o = data.obras.find(x => x.id === obraId);
+  const disponibles = data.personal.filter(p => !(o.personal||[]).includes(p.id));
+  if (disponibles.length === 0) return alert('Todo el personal ya está asignado o no hay personal registrado');
+  openModal('Asignar personal', `
+    <div class="form-group">
+      <label>Selecciona trabajador</label>
+      <select id="f-pid">${disponibles.map(p => `<option value="${p.id}">${p.nombre} (${p.cargo||'—'})</option>`).join('')}</select>
+    </div>
+  `, () => {
+    o.personal = [...(o.personal||[]), g('f-pid')];
+    save('obras'); closeModal(); openObra(obraId);
+  });
+}
+
+function modalAsignarHerramienta(obraId) {
+  const o = data.obras.find(x => x.id === obraId);
+  const disponibles = data.herramientas.filter(h => !(o.herramientas||[]).includes(h.id));
+  if (disponibles.length === 0) return alert('Todas las herramientas ya están asignadas o no hay herramientas registradas');
+  openModal('Asignar herramienta', `
+    <div class="form-group">
+      <label>Selecciona herramienta</label>
+      <select id="f-hid">${disponibles.map(h => `<option value="${h.id}">${h.nombre} (${h.tipo||'—'})</option>`).join('')}</select>
+    </div>
+  `, () => {
+    o.herramientas = [...(o.herramientas||[]), g('f-hid')];
+    save('obras'); closeModal(); openObra(obraId);
+  });
+}
+
+// ============================================================
+// PRESUPUESTOS
+// ============================================================
+function renderPresupuestos() {
+  return `
+    <div class="page-header">
+      <div class="page-title"><span>Presupuestos</span></div>
+      <button class="btn btn-primary" onclick="modalPresupuesto()">+ Nuevo presupuesto</button>
+    </div>
+    <div class="table-wrap">
+      <div class="table-toolbar">
+        <input class="search-input" placeholder="Buscar..." />
+        <span style="color:var(--text3);font-size:12px">${data.presupuestos.length} presupuestos</span>
+      </div>
+      <table>
+        <thead><tr><th>Nº</th><th>Obra / Cliente</th><th>Importe</th><th>Estado</th><th>Fecha</th><th></th></tr></thead>
+        <tbody>
+          ${data.presupuestos.length === 0 ? '<tr><td colspan="6" class="text-center" style="padding:32px;color:var(--text3)">No hay presupuestos</td></tr>' :
+            data.presupuestos.slice().reverse().map(p => `<tr>
+              <td><span class="money">${p.numero||'—'}</span></td>
+              <td><div><strong>${obraName(p.obraId)}</strong><div style="font-size:11px;color:var(--text2)">${clienteName(p.clienteId)}</div></div></td>
+              <td><span class="money">${fmt(p.importe)}</span></td>
+              <td><span class="badge ${ESTADOS_PRESUP[p.estado]||'badge-gray'}">${p.estado||'—'}</span></td>
+              <td>${fmtDate(p.fecha)}</td>
+              <td><div class="td-actions">
+                <button class="btn btn-ghost btn-sm" onclick="modalPresupuesto('${p.id}')">✏️</button>
+                <button class="btn btn-danger btn-sm" onclick="deleteItem('presupuestos','${p.id}')">🗑</button>
+              </div></td>
+            </tr>`).join('')
+          }
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function modalPresupuesto(id) {
+  const p = id ? data.presupuestos.find(x => x.id === id) : {};
+  const v = p || {};
+  const obraOpts = data.obras.map(o => `<option value="${o.id}" ${v.obraId===o.id?'selected':''}>${o.nombre}</option>`).join('');
+  const clienteOpts = data.clientes.map(c => `<option value="${c.id}" ${v.clienteId===c.id?'selected':''}>${c.nombre}</option>`).join('');
+  const estadoOpts = ['Borrador','Enviado','Aceptado','Rechazado'].map(e => `<option value="${e}" ${v.estado===e?'selected':''}>${e}</option>`).join('');
+  openModal(id?'Editar presupuesto':'Nuevo presupuesto', `
+    <div class="form-grid">
+      <div class="form-group"><label>Nº Presupuesto</label><input id="f-numero" value="${v.numero||''}" placeholder="PRES-001" /></div>
+      <div class="form-group"><label>Estado</label><select id="f-estado"><option value="">—</option>${estadoOpts}</select></div>
+      <div class="form-group"><label>Obra</label><select id="f-obraId"><option value="">Sin obra</option>${obraOpts}</select></div>
+      <div class="form-group"><label>Cliente</label><select id="f-clienteId"><option value="">Sin cliente</option>${clienteOpts}</select></div>
+      <div class="form-group"><label>Importe total (€)</label><input type="number" id="f-importe" value="${v.importe||''}" /></div>
+      <div class="form-group"><label>Fecha</label><input type="date" id="f-fecha" value="${v.fecha||''}" /></div>
+      <div class="form-group full"><label>Descripción / Partidas</label><textarea id="f-descripcion">${v.descripcion||''}</textarea></div>
+    </div>
+  `, () => {
+    const obj = { id: id||DB.id(), numero: g('f-numero'), estado: g('f-estado'), obraId: g('f-obraId'), clienteId: g('f-clienteId'), importe: g('f-importe'), fecha: g('f-fecha'), descripcion: g('f-descripcion') };
+    if (id) { const i = data.presupuestos.findIndex(x=>x.id===id); data.presupuestos[i]=obj; }
+    else data.presupuestos.push(obj);
+    save('presupuestos'); closeModal(); render();
+  });
+}
+
+// ============================================================
+// FACTURAS
+// ============================================================
+function renderFacturas() {
+  const total = data.facturas.reduce((s,f)=>s+Number(f.importe||0),0);
+  const cobradas = data.facturas.filter(f=>f.estado==='Cobrada').reduce((s,f)=>s+Number(f.importe||0),0);
+  return `
+    <div class="page-header">
+      <div class="page-title"><span>Facturas</span></div>
+      <button class="btn btn-primary" onclick="modalFactura()">+ Nueva factura</button>
+    </div>
+    <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px">
+      <div class="stat-card"><div class="stat-label">Total facturado</div><div class="stat-value money" style="font-size:20px;color:var(--text)">${fmt(total)}</div></div>
+      <div class="stat-card"><div class="stat-label">Cobrado</div><div class="stat-value money" style="font-size:20px;color:var(--green)">${fmt(cobradas)}</div></div>
+      <div class="stat-card"><div class="stat-label">Pendiente</div><div class="stat-value money" style="font-size:20px;color:var(--red)">${fmt(total-cobradas)}</div></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Nº Factura</th><th>Obra / Cliente</th><th>Importe</th><th>Estado</th><th>Vencimiento</th><th></th></tr></thead>
+        <tbody>
+          ${data.facturas.length === 0 ? '<tr><td colspan="6" class="text-center" style="padding:32px;color:var(--text3)">No hay facturas</td></tr>' :
+            data.facturas.slice().reverse().map(f => `<tr>
+              <td><span class="money">${f.numero||'—'}</span></td>
+              <td><div><strong>${obraName(f.obraId)}</strong><div style="font-size:11px;color:var(--text2)">${clienteName(f.clienteId)}</div></div></td>
+              <td><span class="money">${fmt(f.importe)}</span></td>
+              <td><span class="badge ${ESTADOS_FACT[f.estado]||'badge-gray'}">${f.estado||'—'}</span></td>
+              <td>${fmtDate(f.vencimiento)}</td>
+              <td><div class="td-actions">
+                <button class="btn btn-ghost btn-sm" onclick="modalFactura('${f.id}')">✏️</button>
+                <button class="btn btn-danger btn-sm" onclick="deleteItem('facturas','${f.id}')">🗑</button>
+              </div></td>
+            </tr>`).join('')
+          }
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function modalFactura(id) {
+  const f = id ? data.facturas.find(x=>x.id===id) : {};
+  const v = f || {};
+  const obraOpts = data.obras.map(o=>`<option value="${o.id}" ${v.obraId===o.id?'selected':''}>${o.nombre}</option>`).join('');
+  const clienteOpts = data.clientes.map(c=>`<option value="${c.id}" ${v.clienteId===c.id?'selected':''}>${c.nombre}</option>`).join('');
+  const estadoOpts = ['Emitida','Cobrada','Vencida','Parcial'].map(e=>`<option value="${e}" ${v.estado===e?'selected':''}>${e}</option>`).join('');
+  openModal(id?'Editar factura':'Nueva factura', `
+    <div class="form-grid">
+      <div class="form-group"><label>Nº Factura</label><input id="f-numero" value="${v.numero||''}" placeholder="FAC-001" /></div>
+      <div class="form-group"><label>Estado</label><select id="f-estado"><option value="">—</option>${estadoOpts}</select></div>
+      <div class="form-group"><label>Obra</label><select id="f-obraId"><option value="">Sin obra</option>${obraOpts}</select></div>
+      <div class="form-group"><label>Cliente</label><select id="f-clienteId"><option value="">Sin cliente</option>${clienteOpts}</select></div>
+      <div class="form-group"><label>Importe (€)</label><input type="number" id="f-importe" value="${v.importe||''}" /></div>
+      <div class="form-group"><label>Fecha emisión</label><input type="date" id="f-fecha" value="${v.fecha||''}" /></div>
+      <div class="form-group"><label>Fecha vencimiento</label><input type="date" id="f-vencimiento" value="${v.vencimiento||''}" /></div>
+      <div class="form-group"><label>Retención IRPF (%)</label><input type="number" id="f-irpf" value="${v.irpf||''}" placeholder="0" /></div>
+      <div class="form-group full"><label>Notas</label><textarea id="f-notas">${v.notas||''}</textarea></div>
+    </div>
+  `, () => {
+    const obj = { id: id||DB.id(), numero: g('f-numero'), estado: g('f-estado'), obraId: g('f-obraId'), clienteId: g('f-clienteId'), importe: g('f-importe'), fecha: g('f-fecha'), vencimiento: g('f-vencimiento'), irpf: g('f-irpf'), notas: g('f-notas') };
+    if (id) { const i = data.facturas.findIndex(x=>x.id===id); data.facturas[i]=obj; }
+    else data.facturas.push(obj);
+    save('facturas'); closeModal(); render();
+  });
+}
+
+// ============================================================
+// PAGOS
+// ============================================================
+function renderPagos() {
+  const total = data.pagos.reduce((s,p)=>s+Number(p.importe||0),0);
+  return `
+    <div class="page-header">
+      <div class="page-title"><span>Pagos</span></div>
+      <button class="btn btn-primary" onclick="modalPago()">+ Registrar pago</button>
+    </div>
+    <div class="table-wrap">
+      <div class="table-toolbar">
+        <span style="color:var(--text2);font-size:13px">Total cobrado: <span class="money money-pos">${fmt(total)}</span></span>
+      </div>
+      <table>
+        <thead><tr><th>Obra / Cliente</th><th>Importe</th><th>Método</th><th>Fecha</th><th>Notas</th><th></th></tr></thead>
+        <tbody>
+          ${data.pagos.length === 0 ? '<tr><td colspan="6" class="text-center" style="padding:32px;color:var(--text3)">No hay pagos registrados</td></tr>' :
+            data.pagos.slice().reverse().map(p => `<tr>
+              <td><div><strong>${obraName(p.obraId)}</strong><div style="font-size:11px;color:var(--text2)">${clienteName(p.clienteId)}</div></div></td>
+              <td><span class="money money-pos">${fmt(p.importe)}</span></td>
+              <td>${p.metodo||'—'}</td>
+              <td>${fmtDate(p.fecha)}</td>
+              <td style="color:var(--text2);font-size:12px">${p.notas||'—'}</td>
+              <td><div class="td-actions">
+                <button class="btn btn-ghost btn-sm" onclick="modalPago('${p.id}')">✏️</button>
+                <button class="btn btn-danger btn-sm" onclick="deleteItem('pagos','${p.id}')">🗑</button>
+              </div></td>
+            </tr>`).join('')
+          }
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function modalPago(id) {
+  const p = id ? data.pagos.find(x=>x.id===id) : {};
+  const v = p || {};
+  const obraOpts = data.obras.map(o=>`<option value="${o.id}" ${v.obraId===o.id?'selected':''}>${o.nombre}</option>`).join('');
+  const clienteOpts = data.clientes.map(c=>`<option value="${c.id}" ${v.clienteId===c.id?'selected':''}>${c.nombre}</option>`).join('');
+  openModal(id?'Editar pago':'Registrar pago', `
+    <div class="form-grid">
+      <div class="form-group"><label>Obra</label><select id="f-obraId"><option value="">Sin obra</option>${obraOpts}</select></div>
+      <div class="form-group"><label>Cliente</label><select id="f-clienteId"><option value="">Sin cliente</option>${clienteOpts}</select></div>
+      <div class="form-group"><label>Importe (€) *</label><input type="number" id="f-importe" value="${v.importe||''}" /></div>
+      <div class="form-group"><label>Fecha</label><input type="date" id="f-fecha" value="${v.fecha||new Date().toISOString().slice(0,10)}" /></div>
+      <div class="form-group full"><label>Método de pago</label><select id="f-metodo"><option value="">—</option><option>Transferencia</option><option>Efectivo</option><option>Cheque</option><option>Tarjeta</option></select></div>
+      <div class="form-group full"><label>Notas</label><textarea id="f-notas">${v.notas||''}</textarea></div>
+    </div>
+  `, () => {
+    const importe = g('f-importe');
+    if (!importe) return alert('Importe obligatorio');
+    const obj = { id: id||DB.id(), obraId: g('f-obraId'), clienteId: g('f-clienteId'), importe, fecha: g('f-fecha'), metodo: g('f-metodo'), notas: g('f-notas') };
+    if (id) { const i = data.pagos.findIndex(x=>x.id===id); data.pagos[i]=obj; }
+    else data.pagos.push(obj);
+    save('pagos'); closeModal(); render();
+  });
+}
+
+// ============================================================
+// PERSONAL
+// ============================================================
+function renderPersonal() {
+  return `
+    <div class="page-header">
+      <div class="page-title"><span>Personal</span></div>
+      <button class="btn btn-primary" onclick="modalPersonal()">+ Añadir trabajador</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Nombre</th><th>Cargo / Especialidad</th><th>Teléfono</th><th>DNI</th><th>Obras asignadas</th><th></th></tr></thead>
+        <tbody>
+          ${data.personal.length === 0 ? '<tr><td colspan="6" class="text-center" style="padding:32px;color:var(--text3)">No hay personal registrado</td></tr>' :
+            data.personal.map(p => {
+              const obras = data.obras.filter(o => (o.personal||[]).includes(p.id));
+              return `<tr>
+                <td><strong>${p.nombre}</strong></td>
+                <td>${p.cargo||'—'}</td>
+                <td>${p.telefono||'—'}</td>
+                <td><span class="money">${p.dni||'—'}</span></td>
+                <td><span class="badge badge-blue">${obras.length}</span></td>
+                <td><div class="td-actions">
+                  <button class="btn btn-ghost btn-sm" onclick="modalPersonal('${p.id}')">✏️</button>
+                  <button class="btn btn-danger btn-sm" onclick="deleteItem('personal','${p.id}')">🗑</button>
+                </div></td>
+              </tr>`;
+            }).join('')
+          }
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function modalPersonal(id) {
+  const p = id ? data.personal.find(x=>x.id===id) : {};
+  const v = p || {};
+  openModal(id?'Editar trabajador':'Nuevo trabajador', `
+    <div class="form-grid">
+      <div class="form-group full"><label>Nombre completo *</label><input id="f-nombre" value="${v.nombre||''}" /></div>
+      <div class="form-group"><label>Cargo / Especialidad</label><input id="f-cargo" value="${v.cargo||''}" placeholder="Albañil, Electricista..." /></div>
+      <div class="form-group"><label>Teléfono</label><input id="f-telefono" value="${v.telefono||''}" /></div>
+      <div class="form-group"><label>DNI</label><input id="f-dni" value="${v.dni||''}" /></div>
+      <div class="form-group"><label>Salario/hora (€)</label><input type="number" id="f-salario" value="${v.salario||''}" /></div>
+      <div class="form-group"><label>Tipo contrato</label><input id="f-contrato" value="${v.contrato||''}" placeholder="Fijo, Temporal..." /></div>
+      <div class="form-group full"><label>Notas</label><textarea id="f-notas">${v.notas||''}</textarea></div>
+    </div>
+  `, () => {
+    const nombre = g('f-nombre');
+    if (!nombre) return alert('Nombre obligatorio');
+    const obj = { id: id||DB.id(), nombre, cargo: g('f-cargo'), telefono: g('f-telefono'), dni: g('f-dni'), salario: g('f-salario'), contrato: g('f-contrato'), notas: g('f-notas') };
+    if (id) { const i = data.personal.findIndex(x=>x.id===id); data.personal[i]=obj; }
+    else data.personal.push(obj);
+    save('personal'); closeModal(); render();
+  });
+}
+
+// ============================================================
+// HERRAMIENTAS
+// ============================================================
+function renderHerramientas() {
+  return `
+    <div class="page-header">
+      <div class="page-title"><span>Herramientas</span></div>
+      <button class="btn btn-primary" onclick="modalHerramienta()">+ Añadir herramienta</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Nombre</th><th>Tipo</th><th>Código</th><th>Estado</th><th>Obra actual</th><th></th></tr></thead>
+        <tbody>
+          ${data.herramientas.length === 0 ? '<tr><td colspan="6" class="text-center" style="padding:32px;color:var(--text3)">No hay herramientas registradas</td></tr>' :
+            data.herramientas.map(h => {
+              const obraActual = data.obras.find(o => (o.herramientas||[]).includes(h.id) && o.estado === 'En curso');
+              return `<tr>
+                <td><strong>${h.nombre}</strong></td>
+                <td>${h.tipo||'—'}</td>
+                <td><span class="money">${h.codigo||'—'}</span></td>
+                <td><span class="badge ${h.estado==='Disponible'?'badge-green':h.estado==='En obra'?'badge-blue':'badge-red'}">${h.estado||'—'}</span></td>
+                <td>${obraActual ? obraActual.nombre : '—'}</td>
+                <td><div class="td-actions">
+                  <button class="btn btn-ghost btn-sm" onclick="modalHerramienta('${h.id}')">✏️</button>
+                  <button class="btn btn-danger btn-sm" onclick="deleteItem('herramientas','${h.id}')">🗑</button>
+                </div></td>
+              </tr>`;
+            }).join('')
+          }
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function modalHerramienta(id) {
+  const h = id ? data.herramientas.find(x=>x.id===id) : {};
+  const v = h || {};
+  openModal(id?'Editar herramienta':'Nueva herramienta', `
+    <div class="form-grid">
+      <div class="form-group full"><label>Nombre *</label><input id="f-nombre" value="${v.nombre||''}" placeholder="Ej: Radial Bosch GWS..." /></div>
+      <div class="form-group"><label>Tipo</label><input id="f-tipo" value="${v.tipo||''}" placeholder="Eléctrica, Manual..." /></div>
+      <div class="form-group"><label>Código / Nº serie</label><input id="f-codigo" value="${v.codigo||''}" /></div>
+      <div class="form-group"><label>Estado</label><select id="f-estado"><option value="">—</option><option>Disponible</option><option>En obra</option><option>En reparación</option><option>Baja</option></select></div>
+      <div class="form-group full"><label>Notas</label><textarea id="f-notas">${v.notas||''}</textarea></div>
+    </div>
+  `, () => {
+    const nombre = g('f-nombre');
+    if (!nombre) return alert('Nombre obligatorio');
+    const obj = { id: id||DB.id(), nombre, tipo: g('f-tipo'), codigo: g('f-codigo'), estado: g('f-estado'), notas: g('f-notas') };
+    if (id) { const i = data.herramientas.findIndex(x=>x.id===id); data.herramientas[i]=obj; }
+    else data.herramientas.push(obj);
+    save('herramientas'); closeModal(); render();
+  });
+}
+
+// ============================================================
+// GENERIC DELETE
+// ============================================================
+function deleteItem(key, id) {
+  if (!confirm('¿Seguro que quieres eliminar este elemento?')) return;
+  data[key] = data[key].filter(x => x.id !== id);
+  save(key); render();
+}
+
+// ============================================================
+// MODAL ENGINE
+// ============================================================
+let modalCallback = null;
+
+function openModal(title, body, onSave) {
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-body').innerHTML = body;
+  document.getElementById('modal-footer').innerHTML = `
+    <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+    <button class="btn btn-primary" id="modal-save-btn">Guardar</button>
+  `;
+  modalCallback = onSave;
+  document.getElementById('modal-overlay').classList.remove('hidden');
+  setTimeout(() => { const el = document.querySelector('#modal-body input'); if(el) el.focus(); }, 100);
+  document.getElementById('modal-save-btn').onclick = () => { if(modalCallback) modalCallback(); };
+}
+
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('modal-overlay')) return;
+  document.getElementById('modal-overlay').classList.add('hidden');
+  modalCallback = null;
+}
+
+// ============================================================
+// FILTER TABLE
+// ============================================================
+function filterTable(type) {
+  const q = document.getElementById('search-' + type)?.value.toLowerCase() || '';
+  document.querySelectorAll('.' + type.slice(0,-1) + '-row').forEach(row => {
+    const search = row.dataset.search || '';
+    row.style.display = search.includes(q) ? '' : 'none';
+  });
+}
+
+// ============================================================
+// VEHÍCULOS
+// ============================================================
+function renderVehiculos() {
+  const alertas = data.vehiculos.filter(v => {
+    return (v.itvFecha && daysDiff(v.itvFecha) <= 30) ||
+           (v.seguroFecha && daysDiff(v.seguroFecha) <= 30) ||
+           (v.revisionFecha && daysDiff(v.revisionFecha) <= 30);
+  });
+  return `
+    <div class="page-header">
+      <div class="page-title"><span>Flota de Vehículos</span></div>
+      <button class="btn btn-primary" onclick="modalVehiculo()">+ Añadir vehículo</button>
+    </div>
+
+    ${alertas.length > 0 ? `<div class="alert" style="margin-bottom:20px">
+      ⚠️ <strong>${alertas.length} vehículo${alertas.length>1?'s':''} con vencimientos próximos (≤30 días):</strong>
+      ${alertas.map(v => {
+        const msgs = [];
+        if (v.itvFecha && daysDiff(v.itvFecha) <= 30) msgs.push('ITV ' + fmtDate(v.itvFecha));
+        if (v.seguroFecha && daysDiff(v.seguroFecha) <= 30) msgs.push('Seguro ' + fmtDate(v.seguroFecha));
+        if (v.revisionFecha && daysDiff(v.revisionFecha) <= 30) msgs.push('Revisión ' + fmtDate(v.revisionFecha));
+        return '<br>· <strong>' + v.nombre + '</strong> (' + (v.matricula||'—') + '): ' + msgs.join(', ');
+      }).join('')}
+    </div>` : ''}
+
+    <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:16px">
+      <div class="stat-card"><div class="stat-label">Total</div><div class="stat-value" style="color:var(--blue)">${data.vehiculos.length}</div></div>
+      <div class="stat-card"><div class="stat-label">Operativos</div><div class="stat-value" style="color:var(--green)">${data.vehiculos.filter(v=>v.estado==='Operativo').length}</div></div>
+      <div class="stat-card"><div class="stat-label">En taller</div><div class="stat-value" style="color:var(--orange)">${data.vehiculos.filter(v=>v.estado==='En taller').length}</div></div>
+      <div class="stat-card"><div class="stat-label">Alertas</div><div class="stat-value" style="color:var(--red)">${alertas.length}</div></div>
+    </div>
+
+    <div class="table-wrap">
+      <div class="table-toolbar">
+        <input class="search-input" id="search-vehiculos" placeholder="Buscar vehículo..." oninput="filterTable('vehiculos')" />
+        <span style="color:var(--text3);font-size:12px">${data.vehiculos.length} vehículos</span>
+      </div>
+      <table>
+        <thead><tr><th>Vehículo</th><th>Matrícula</th><th>Conductor</th><th>Estado</th><th>ITV</th><th>Seguro</th><th>Km</th><th></th></tr></thead>
+        <tbody id="tbody-vehiculos">
+          ${data.vehiculos.length === 0 ? '<tr><td colspan="8" class="text-center" style="padding:32px;color:var(--text3)">No hay vehículos registrados</td></tr>' :
+            data.vehiculos.map(v => {
+              const conductor = data.personal.find(p => p.id === v.conductorId);
+              return '<tr class="vehiculo-row" data-search="' + (v.nombre+v.matricula+(v.marca||'')).toLowerCase() + '">' +
+                '<td><strong>' + v.nombre + '</strong><div style="font-size:11px;color:var(--text2)">' + (v.marca||'') + ' ' + (v.modelo||'') + ' ' + (v.anyo||'') + '</div></td>' +
+                '<td><span class="money" style="letter-spacing:1px">' + (v.matricula||'—') + '</span></td>' +
+                '<td>' + (conductor ? conductor.nombre : '—') + '</td>' +
+                '<td><span class="badge ' + (v.estado==='Operativo'?'badge-green':v.estado==='En taller'?'badge-orange':v.estado==='Averiado'?'badge-red':'badge-gray') + '">' + (v.estado||'—') + '</span></td>' +
+                '<td>' + badgeVenc(v.itvFecha) + '</td>' +
+                '<td>' + badgeVenc(v.seguroFecha) + '</td>' +
+                '<td><span class="money">' + (v.km ? Number(v.km).toLocaleString('es-ES') + ' km' : '—') + '</span></td>' +
+                '<td><div class="td-actions">' +
+                  '<button class="btn btn-primary btn-sm" onclick="openVehiculo(\'' + v.id + '\')">Ver</button>' +
+                  '<button class="btn btn-ghost btn-sm" onclick="modalVehiculo(\'' + v.id + '\')">✏️</button>' +
+                  '<button class="btn btn-danger btn-sm" onclick="deleteItem(\'vehiculos\',\'' + v.id + '\')">🗑</button>' +
+                '</div></td></tr>';
+            }).join('')
+          }
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function daysDiff(fecha) {
+  if (!fecha) return 9999;
+  return Math.ceil((new Date(fecha) - new Date()) / (1000*60*60*24));
+}
+
+function badgeVenc(fecha) {
+  if (!fecha) return '<span style="color:var(--text3)">—</span>';
+  const d = daysDiff(fecha);
+  const label = fmtDate(fecha);
+  if (d < 0) return '<span class="badge badge-red">Vencida</span>';
+  if (d <= 15) return '<span class="badge badge-red">' + label + '</span>';
+  if (d <= 30) return '<span class="badge badge-yellow">' + label + '</span>';
+  return '<span class="badge badge-green">' + label + '</span>';
+}
+
+function openVehiculo(id) {
+  const v = data.vehiculos.find(x => x.id === id);
+  if (!v) return;
+  currentPage = 'vehiculo-detail';
+  document.getElementById('main-content').innerHTML = renderVehiculoDetail(v);
+  bindEvents();
+}
+
+function renderVehiculoDetail(v) {
+  const conductor = data.personal.find(p => p.id === v.conductorId);
+  const incidencias = v.incidencias || [];
+  const repostajes = v.repostajes || [];
+  const totalCoste = repostajes.reduce((s,r)=>s+Number(r.importe||0),0);
+  const totalLitros = repostajes.reduce((s,r)=>s+Number(r.litros||0),0);
+  return `
+    <div class="page-header">
+      <div>
+        <button class="btn btn-ghost btn-sm" onclick="navigate('vehiculos')" style="margin-bottom:8px">← Volver</button>
+        <div class="page-title">${v.nombre} <span class="badge ${v.estado==='Operativo'?'badge-green':v.estado==='En taller'?'badge-orange':'badge-red'}" style="font-size:14px;vertical-align:middle">${v.estado||'—'}</span></div>
+        <div style="color:var(--text2);font-size:13px;margin-top:4px">${v.marca||''} ${v.modelo||''} · <span class="money" style="letter-spacing:1px">${v.matricula||'—'}</span></div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="modalVehiculo('${v.id}')">✏️ Editar</button>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-card">
+        <div class="detail-card-title">Ficha técnica</div>
+        <div class="detail-row"><span class="detail-key">Marca / Modelo</span><span class="detail-val">${v.marca||'—'} ${v.modelo||''}</span></div>
+        <div class="detail-row"><span class="detail-key">Año</span><span class="detail-val">${v.anyo||'—'}</span></div>
+        <div class="detail-row"><span class="detail-key">Matrícula</span><span class="detail-val money" style="letter-spacing:1px">${v.matricula||'—'}</span></div>
+        <div class="detail-row"><span class="detail-key">Km actuales</span><span class="detail-val">${v.km ? Number(v.km).toLocaleString('es-ES') + ' km' : '—'}</span></div>
+        <div class="detail-row"><span class="detail-key">Conductor</span><span class="detail-val">${conductor ? conductor.nombre : '—'}</span></div>
+      </div>
+      <div class="detail-card">
+        <div class="detail-card-title">Documentación</div>
+        <div class="detail-row"><span class="detail-key">ITV</span><span class="detail-val">${badgeVenc(v.itvFecha)}</span></div>
+        <div class="detail-row"><span class="detail-key">Seguro</span><span class="detail-val">${badgeVenc(v.seguroFecha)}</span></div>
+        <div class="detail-row"><span class="detail-key">Próx. revisión</span><span class="detail-val">${badgeVenc(v.revisionFecha)}</span></div>
+        <div class="detail-row"><span class="detail-key">Aseguradora</span><span class="detail-val">${v.aseguradora||'—'}</span></div>
+      </div>
+      <div class="detail-card">
+        <div class="detail-card-title">Combustible</div>
+        <div class="detail-row"><span class="detail-key">Repostajes</span><span class="detail-val">${repostajes.length}</span></div>
+        <div class="detail-row"><span class="detail-key">Litros totales</span><span class="detail-val">${totalLitros.toLocaleString('es-ES')} L</span></div>
+        <div class="detail-row"><span class="detail-key">Coste total</span><span class="detail-val money money-neg">${fmt(totalCoste)}</span></div>
+      </div>
+      <div class="detail-card">
+        <div class="detail-card-title">Incidencias</div>
+        <div class="detail-row"><span class="detail-key">Total</span><span class="detail-val">${incidencias.length}</span></div>
+        <div class="detail-row"><span class="detail-key">Abiertas</span><span class="detail-val"><span class="badge badge-red">${incidencias.filter(i=>!i.resuelta).length}</span></span></div>
+        <div class="detail-row"><span class="detail-key">Resueltas</span><span class="detail-val"><span class="badge badge-green">${incidencias.filter(i=>i.resuelta).length}</span></span></div>
+      </div>
+    </div>
+    ${v.notas ? '<div class="alert" style="background:rgba(59,130,246,0.1);border-color:rgba(59,130,246,0.3);color:var(--blue);margin-bottom:16px">📝 ' + v.notas + '</div>' : ''}
+    <div class="sub-section">
+      <div class="sub-header"><div class="sub-title">⛽ Repostajes</div><button class="btn btn-ghost btn-sm" onclick="modalRepostaje('${v.id}')">+ Añadir</button></div>
+      <div class="sub-body">
+        ${repostajes.length === 0 ? '<div class="empty-state">Sin repostajes registrados</div>' :
+          repostajes.slice().reverse().map((r, ri) => {
+            const realIdx = repostajes.length - 1 - ri;
+            return '<div class="item-row"><div><div class="item-name">' + fmtDate(r.fecha) + ' · ' + (r.litros||'—') + ' L · ' + (r.gasolinera||'—') + '</div>' +
+              '<div class="item-meta">Km: ' + (r.km ? Number(r.km).toLocaleString('es-ES') : '—') + ' · ' + fmt(r.importe) + '</div></div>' +
+              '<button class="btn btn-danger btn-sm" onclick="deleteRepostaje(\'' + v.id + '\',' + realIdx + ')">🗑</button></div>';
+          }).join('')
+        }
+      </div>
+    </div>
+    <div class="sub-section">
+      <div class="sub-header"><div class="sub-title">⚠️ Incidencias / Averías</div><button class="btn btn-ghost btn-sm" onclick="modalIncidencia('${v.id}')">+ Añadir</button></div>
+      <div class="sub-body">
+        ${incidencias.length === 0 ? '<div class="empty-state">Sin incidencias registradas</div>' :
+          incidencias.slice().reverse().map((inc, ri) => {
+            const realIdx = incidencias.length - 1 - ri;
+            return '<div class="item-row"><div>' +
+              '<div class="item-name">' + inc.descripcion + ' <span class="badge ' + (inc.resuelta?'badge-green':'badge-red') + '">' + (inc.resuelta?'Resuelta':'Abierta') + '</span></div>' +
+              '<div class="item-meta">' + fmtDate(inc.fecha) + ' · Coste: ' + fmt(inc.coste) + (inc.taller ? ' · ' + inc.taller : '') + '</div></div>' +
+              '<div class="td-actions">' +
+              (!inc.resuelta ? '<button class="btn btn-ghost btn-sm" onclick="resolverIncidencia(\'' + v.id + '\',' + realIdx + ')">✓ Resolver</button>' : '') +
+              '<button class="btn btn-danger btn-sm" onclick="deleteIncidencia(\'' + v.id + '\',' + realIdx + ')">🗑</button></div></div>';
+          }).join('')
+        }
+      </div>
+    </div>
+  `;
+}
+
+function modalVehiculo(id) {
+  const veh = id ? data.vehiculos.find(x=>x.id===id) : {};
+  const c = veh || {};
+  const conductorOpts = data.personal.map(p=>'<option value="'+p.id+'" '+(c.conductorId===p.id?'selected':'')+'>'+p.nombre+'</option>').join('');
+  openModal(id?'Editar vehículo':'Nuevo vehículo', `
+    <div class="form-grid">
+      <div class="form-group full"><label>Nombre / Alias *</label><input id="f-nombre" value="${c.nombre||''}" placeholder="Furgoneta grande, Van blanca..." /></div>
+      <div class="form-group"><label>Marca</label><input id="f-marca" value="${c.marca||''}" placeholder="Ford, Renault..." /></div>
+      <div class="form-group"><label>Modelo</label><input id="f-modelo" value="${c.modelo||''}" placeholder="Transit, Master..." /></div>
+      <div class="form-group"><label>Año</label><input id="f-anyo" value="${c.anyo||''}" placeholder="2019" /></div>
+      <div class="form-group"><label>Matrícula</label><input id="f-matricula" value="${c.matricula||''}" placeholder="0000 AAA" /></div>
+      <div class="form-group"><label>Estado</label>
+        <select id="f-estado">
+          <option value="">—</option>
+          <option ${c.estado==='Operativo'?'selected':''}>Operativo</option>
+          <option ${c.estado==='En taller'?'selected':''}>En taller</option>
+          <option ${c.estado==='Averiado'?'selected':''}>Averiado</option>
+          <option ${c.estado==='Baja'?'selected':''}>Baja</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Conductor habitual</label><select id="f-conductorId"><option value="">Sin asignar</option>${conductorOpts}</select></div>
+      <div class="form-group"><label>Km actuales</label><input type="number" id="f-km" value="${c.km||''}" /></div>
+      <div class="form-group"><label>Fecha ITV</label><input type="date" id="f-itvFecha" value="${c.itvFecha||''}" /></div>
+      <div class="form-group"><label>Fecha seguro</label><input type="date" id="f-seguroFecha" value="${c.seguroFecha||''}" /></div>
+      <div class="form-group"><label>Próx. revisión</label><input type="date" id="f-revisionFecha" value="${c.revisionFecha||''}" /></div>
+      <div class="form-group"><label>Aseguradora</label><input id="f-aseguradora" value="${c.aseguradora||''}" placeholder="Mapfre, AXA..." /></div>
+      <div class="form-group full"><label>Notas</label><textarea id="f-notas">${c.notas||''}</textarea></div>
+    </div>
+  `, () => {
+    const nombre = g('f-nombre');
+    if (!nombre) return alert('Nombre obligatorio');
+    const obj = { id: id||DB.id(), nombre, marca: g('f-marca'), modelo: g('f-modelo'), anyo: g('f-anyo'),
+      matricula: g('f-matricula').toUpperCase(), estado: g('f-estado'), conductorId: g('f-conductorId'),
+      km: g('f-km'), itvFecha: g('f-itvFecha'), seguroFecha: g('f-seguroFecha'),
+      revisionFecha: g('f-revisionFecha'), aseguradora: g('f-aseguradora'), notas: g('f-notas'),
+      incidencias: c.incidencias||[], repostajes: c.repostajes||[] };
+    if (id) { const i = data.vehiculos.findIndex(x=>x.id===id); data.vehiculos[i]=obj; }
+    else data.vehiculos.push(obj);
+    save('vehiculos'); closeModal(); render();
+  });
+}
+
+function modalRepostaje(vid) {
+  openModal('Añadir repostaje', `
+    <div class="form-grid">
+      <div class="form-group"><label>Fecha</label><input type="date" id="f-fecha" value="${new Date().toISOString().slice(0,10)}" /></div>
+      <div class="form-group"><label>Litros</label><input type="number" id="f-litros" placeholder="50" /></div>
+      <div class="form-group"><label>Importe (€)</label><input type="number" id="f-importe" placeholder="80.00" /></div>
+      <div class="form-group"><label>Km al repostar</label><input type="number" id="f-km" /></div>
+      <div class="form-group full"><label>Gasolinera</label><input id="f-gasolinera" placeholder="Repsol Lleida..." /></div>
+    </div>
+  `, () => {
+    const v = data.vehiculos.find(x=>x.id===vid);
+    v.repostajes = v.repostajes||[];
+    v.repostajes.push({ fecha: g('f-fecha'), litros: g('f-litros'), importe: g('f-importe'), km: g('f-km'), gasolinera: g('f-gasolinera') });
+    if (g('f-km') && Number(g('f-km')) > Number(v.km||0)) v.km = g('f-km');
+    save('vehiculos'); closeModal(); openVehiculo(vid);
+  });
+}
+
+function modalIncidencia(vid) {
+  openModal('Añadir incidencia / avería', `
+    <div class="form-grid">
+      <div class="form-group full"><label>Descripción *</label><textarea id="f-descripcion" placeholder="Ej: Pinchazo rueda delantera..."></textarea></div>
+      <div class="form-group"><label>Fecha</label><input type="date" id="f-fecha" value="${new Date().toISOString().slice(0,10)}" /></div>
+      <div class="form-group"><label>Coste reparación (€)</label><input type="number" id="f-coste" /></div>
+      <div class="form-group full"><label>Taller</label><input id="f-taller" /></div>
+    </div>
+  `, () => {
+    const descripcion = g('f-descripcion');
+    if (!descripcion) return alert('Descripción obligatoria');
+    const v = data.vehiculos.find(x=>x.id===vid);
+    v.incidencias = v.incidencias||[];
+    v.incidencias.push({ descripcion, fecha: g('f-fecha'), coste: g('f-coste'), taller: g('f-taller'), resuelta: false });
+    save('vehiculos'); closeModal(); openVehiculo(vid);
+  });
+}
+
+function resolverIncidencia(vid, i) {
+  const v = data.vehiculos.find(x=>x.id===vid);
+  v.incidencias[i].resuelta = true;
+  save('vehiculos'); openVehiculo(vid);
+}
+function deleteIncidencia(vid, i) {
+  const v = data.vehiculos.find(x=>x.id===vid);
+  v.incidencias.splice(i,1);
+  save('vehiculos'); openVehiculo(vid);
+}
+function deleteRepostaje(vid, i) {
+  const v = data.vehiculos.find(x=>x.id===vid);
+  v.repostajes.splice(i,1);
+  save('vehiculos'); openVehiculo(vid);
+}
+
+// ============================================================
+// EXPORT / IMPORT
+// ============================================================
+function exportData() {
+  const json = JSON.stringify(data, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'interformes-backup-' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+}
+
+function importData() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json';
+  input.onchange = e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try {
+        const imported = JSON.parse(ev.target.result);
+        if (confirm('¿Importar estos datos? Sobrescribirá los datos actuales.')) {
+          Object.keys(imported).forEach(k => { data[k] = imported[k]; save(k); });
+          render();
+          alert('Datos importados correctamente.');
+        }
+      } catch { alert('Archivo no válido.'); }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+// ============================================================
+// UTILS
+// ============================================================
+function g(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
+function bindEvents() {} // placeholder for future event binding
+
+// ============================================================
+// INIT
+// ============================================================
+render();
+initGoogleDrive();
+</script>
+
+
+<iframe id="apiproxye498b7164ac3630a5bba0b9cd576cbb1d7f9e2cd0.762976464" name="apiproxye498b7164ac3630a5bba0b9cd576cbb1d7f9e2cd0.762976464" src="./index_files/proxy.html" tabindex="-1" aria-hidden="true" style="width: 1px; height: 1px; position: absolute; top: -100px; display: none;"></iframe></body></html>
